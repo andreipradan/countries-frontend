@@ -19,3 +19,16 @@
   position: relative;
   margin: (-$widget-padding-vertical) (-$widget-padding-horizontal) 0;
 }
+
+.searchForm {
+  min-width: 255px;
+}
+
+.inputGroupText {
+  background: #12142B;
+  opacity: .8;
+}
+
+.headerIcon {
+  fill: $icon-color;
+}
