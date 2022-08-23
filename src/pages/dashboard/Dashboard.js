@@ -5,7 +5,7 @@ import {Row, Col, ButtonGroup, Button} from "reactstrap";
 import AnimateNumber from "react-animated-number";
 
 import Loader from "../../components/Loader";
-import Map from "./components/am4chartMap/am4chartMap";
+import Map from "./components/Map/Map";
 import Widget from "../../components/Widget";
 import s from "./Dashboard.module.scss";
 import widgetClasses from "../../components/Widget/Widget.module.scss";
@@ -45,14 +45,13 @@ const Dashboard = props => {
       </h1>
 
       <Row>
-        <Col lg={7}>
+        <Col lg={9}>
           <Widget className="bg-transparent">
             <Map inProgress={inProgress}/>
           </Widget>
         </Col>
-        <Col lg={1}/>
 
-        <Col lg={4}>
+        <Col lg={3}>
           <Widget
             className="bg-transparent"
             title={<h5>{" "}Map<span className="fw-semi-bold">&nbsp;Statistics</span></h5>}
@@ -80,7 +79,7 @@ const Dashboard = props => {
             </ButtonGroup>
             <p className="mt">Score: <strong><AnimateNumber value={props.foundCountries?.length}/></strong></p>
             <ProgressStats label="Total countries" value={props.totalCountries} total={props.totalCountries}/>
-            <ProgressStats label="Countries remaining" value={110} total={props.totalCountries}/>
+            <ProgressStats label="Countries remaining" value={props.countries?.length} total={props.totalCountries}/>
             <ProgressStats label="Time remaining" value={counter} total={300}/>
           </Widget>
         </Col>
