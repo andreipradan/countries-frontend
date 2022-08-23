@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   ButtonGroup,
   ListGroup,
@@ -37,6 +38,9 @@ const ResultsModal = props => {
             active={activeTab === "foundCountries"}
           >
             Found countries
+            <Badge className="d-sm-down-none ml" style={{borderRadius: "50%"}} color="success">
+              {props.foundCountries?.length || 0}
+            </Badge>
           </Button>
           <Button
             outline color="default" size="sm"
@@ -45,6 +49,9 @@ const ResultsModal = props => {
             active={activeTab === "countries"}
           >
             Remaining countries
+            <Badge className={`d-sm-down-none ml`} style={{borderRadius: "50%"}} color="info">
+              {props.countries?.length || 0}
+            </Badge>
           </Button>
         </ButtonGroup>
       </header>
