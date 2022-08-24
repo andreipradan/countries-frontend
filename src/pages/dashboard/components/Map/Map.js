@@ -27,9 +27,10 @@ const Map = props => {
   const generateSeries = (chart, root, continent) => {
     const series = chart.series.push(am5map.MapPolygonSeries.new(root, {
       geoJSON: am5geodata_worldLow,
-      include: am5geodata_worldLow.features.filter(c =>
-        countries[c.id]?.continent === continent
-      ).map(c => c.id)
+      include: am5geodata_worldLow.features.filter(c => c.id === "KN"
+        ? continent === "North America"
+        : countries[c.id]?.continent === continent
+      ).map(c => c.id),
     }))
     series.hide()
 

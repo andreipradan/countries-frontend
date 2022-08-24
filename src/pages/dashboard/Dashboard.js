@@ -23,18 +23,18 @@ const secondsToTime = secs => {
 }
 
 const Dashboard = props => {
-  const totalTime = 300
-  const [counter, setCounter] = useState(totalTime)
+  const [counter, setCounter] = useState(0)
   const [inProgress, setInProgress] = useState(false)
   const [started, setStarted] = useState(false)
   const [modal, setModal] = useState(false)
 
   const {mins, secs} = secondsToTime(counter)
 
+  useEffect(() => setCounter(props.totalCountries * 10), [props.totalCountries])
 
   useEffect(() => {
     inProgress && setTimeout(() => {
-      if (counter < 1) handleEndGame()
+      if (counter < 1 || !props.countries.length ) handleEndGame()
       else setCounter(counter - 1)
     }, 1000)
   })
@@ -48,7 +48,7 @@ const Dashboard = props => {
 
   const handleNewGame = () => {
     props.dispatch(newGame(props.activeMap))
-    setCounter(totalTime)
+    setCounter(props.totalCountries * 10)
     setGameOver(false)
     setInProgress(false)
     setStarted(false)
@@ -152,7 +152,7 @@ const Dashboard = props => {
                 <ProgressStats label="Total countries" value={props.totalCountries}
                                total={props.totalCountries}/>
                 <ProgressStats label="Time remaining" value={counter} dynamicLabel
-                               verbose={`${mins}:${secs}`} total={totalTime}/>
+                               verbose={`${mins}:${secs}`} total={props.totalCountries * 10}/>
               </Widget>
             </Col>
           : "Please select a map"

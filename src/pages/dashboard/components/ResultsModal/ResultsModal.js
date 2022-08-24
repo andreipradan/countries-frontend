@@ -17,7 +17,11 @@ const ResultsModal = props => {
   if (activeTab === "countries")
     countries = countries.sort((a, b) => a.name > b.name ? 1 : -1)
 
-
+  const color = props.foundCountries?.length < props.totalCountries * 30 / 100
+    ? "danger"
+    : props.foundCountries?.length < props.totalCountries * 60 /100
+      ? "warning"
+      : "success"
   return <Modal isOpen={props.isOpen} toggle={props.toggle}>
     <section
       className={`${notificationsClasses.notifications} navbar-notifications`}>
@@ -25,7 +29,9 @@ const ResultsModal = props => {
         className={[notificationsClasses.cardHeader, 'card-header'].join(' ')}>
         <div className="text-center mb-sm text-white">
           <strong >
-            You found <span className="text-danger"> {props.foundCountries?.length || 0} </span> countries!
+            You found {!props.countries?.length && "all"}
+            <span className={`text-${color}`}> {props.foundCountries?.length || 0} </span>
+            countries!
           </strong>
         </div>
         <ButtonGroup className={notificationsClasses.notificationButtons}>
