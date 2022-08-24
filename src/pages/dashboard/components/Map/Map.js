@@ -1,13 +1,4 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-
-import * as am5 from "@amcharts/amcharts5";
-import * as am5map from "@amcharts/amcharts5/map";
-import am5geodata_continentsLow from "@amcharts/amcharts5-geodata/continentsLow";
-import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-import countries from "@amcharts/amcharts5-geodata/data/countries2";
-
-import s from './Map.module.scss';
 import {
   Form,
   FormGroup,
@@ -16,12 +7,22 @@ import {
   InputGroupAddon,
   InputGroupText
 } from "reactstrap";
+import { connect } from "react-redux";
+
+import * as am5 from "@amcharts/amcharts5";
+import * as am5map from "@amcharts/amcharts5/map";
+import am5geodata_continentsLow from "@amcharts/amcharts5-geodata/continentsLow";
+import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
+import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import countries from "@amcharts/amcharts5-geodata/data/countries2";
+
 import SearchIcon from "../../../../components/Icons/HeaderIcons/SearchIcon";
-import {newGame, foundCountry, setActiveMap} from "../../../../actions/map";
-import {connect} from "react-redux";
+import { foundCountry, newGame } from "../../../../actions/map";
+import s from './Map.module.scss';
 
 const Map = props => {
   const [allSeries, setAllSeries] = useState(null)
+  const [homeButton, setHomeButton] = useState(null)
 
   const generateSeries = (chart, root, continent) => {
     const series = chart.series.push(am5map.MapPolygonSeries.new(root, {
@@ -73,8 +74,7 @@ const Map = props => {
       for (const continent in allSeries)
         if (continent === ev.target.dataItem.dataContext.name) {
           allSeries[continent].show()
-          props.dispatch(setActiveMap(continent))
-          props.dispatch(newGame())
+          props.dispatch(newGame(continent))
         } else
           allSeries[continent].hide()
     });
@@ -106,13 +106,14 @@ const Map = props => {
         fill: am5.color(0xffffff)
       })
     }));
-    homeButton.events.on("click", function() {
+    homeButton.events.on("click", () => {
       chart.goHome();
       homeButton.hide();
       for (const continent in allSeries) allSeries[continent].hide()
       continentSeries.show()
-      props.dispatch(setActiveMap(null))
+      props.dispatch(newGame(null))
     });
+    setHomeButton(homeButton)
 
     return () => root.dispose()
 
@@ -132,8 +133,15 @@ const Map = props => {
       return config
     })
     allSeries[props.activeMap].data.setAll(data)
-  }, [allSeries, props.foundCountries])
+  }, [allSeries, props.activeMap, props.foundCountries])
 
+  useEffect(()=>{
+    homeButton && (
+      !props.activeMap || props.inProgress || (props.started && !props.gameOver)
+        ? homeButton.hide()
+        : homeButton.show()
+    )
+  }, [homeButton, props.gameOver, props.inProgress])
   return (
     <div className={s.mapChart}>
       {

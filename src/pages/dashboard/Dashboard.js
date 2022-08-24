@@ -8,7 +8,7 @@ import ResultsModal from "./components/ResultsModal"
 import Widget from "../../components/Widget";
 import s from "./Dashboard.module.scss";
 
-import { newGame } from "../../actions/map";
+import { setGameOver, newGame } from "../../actions/map";
 
 const secondsToTime = secs => {
   let divisor_for_minutes = secs % (60 * 60);
@@ -25,28 +25,29 @@ const secondsToTime = secs => {
 const Dashboard = props => {
   const totalTime = 300
   const [counter, setCounter] = useState(totalTime)
-  const [gameOver, setGameOver] = useState(false)
   const [inProgress, setInProgress] = useState(false)
   const [started, setStarted] = useState(false)
   const [modal, setModal] = useState(false)
 
-  let {mins, secs} = secondsToTime(counter)
+  const {mins, secs} = secondsToTime(counter)
 
 
   useEffect(() => {
     inProgress && setTimeout(() => {
-      if (counter < 1) {
-        setGameOver(true)
-        setInProgress(false)
-        setStarted(false)
-        setModal(true)
-      }
+      if (counter < 1) handleEndGame()
       else setCounter(counter - 1)
     }, 1000)
   })
 
+  const handleEndGame = () => {
+    props.dispatch(setGameOver(true))
+    setInProgress(false)
+    setStarted(false)
+    setModal(true)
+  }
+
   const handleNewGame = () => {
-    props.dispatch(newGame())
+    props.dispatch(newGame(props.activeMap))
     setCounter(totalTime)
     setGameOver(false)
     setInProgress(false)
@@ -56,9 +57,7 @@ const Dashboard = props => {
   const startStopGame = () => {
     setInProgress(!inProgress)
     if (inProgress) setStarted(true)
-    if (!inProgress && gameOver) {
-      handleNewGame()
-    }
+    if (!inProgress && props.gameOver) handleNewGame()
   }
 
   return (
@@ -69,7 +68,7 @@ const Dashboard = props => {
       <Row>
         <Col lg={9}>
           <Widget className="bg-transparent">
-            <Map inProgress={inProgress}/>
+            <Map inProgress={inProgress} started={started}/>
           </Widget>
         </Col>
 
@@ -99,26 +98,39 @@ const Dashboard = props => {
                         ? "Pause"
                         : started
                           ? "Resume"
-                          : gameOver
+                          : props.gameOver
                             ? "New game"
                             : "Start"
                     }
                   </Button>
                   {
-                    !inProgress && started && <Button
-                      className="text-white"
-                      color="warning"
-                      size="xs"
-                      onClick={handleNewGame}
-                    >
-                      <span className="auth-btn-circle ">
-                        <i className="la la-refresh"/>
-                      </span>
-                      Reset
-                    </Button>
+                    !inProgress && started && <>
+                      <Button
+                        className="text-white"
+                        color="warning"
+                        size="xs"
+                        onClick={handleNewGame}
+                      >
+                        <span className="auth-btn-circle ">
+                          <i className="la la-refresh"/>
+                        </span>
+                        Restart
+                      </Button>
+                      <Button
+                        className="text-white"
+                        color="danger"
+                        size="xs"
+                        onClick={handleEndGame}
+                      >
+                        <span className="auth-btn-circle ">
+                          <i className="la la-times"/>
+                        </span>
+                        End game
+                      </Button>
+                    </>
                   }
                   {
-                    gameOver && !modal && <Button
+                    props.gameOver && !modal && <Button
                       className="text-white"
                       color="danger"
                       size="xs"

@@ -1,4 +1,4 @@
-import { CLEAR_FOUND_COUNTRIES, FOUND_COUNTRY, NEW_GAME, SET_ACTIVE_MAP, SET_COUNTRIES } from '../actions/map';
+import { FOUND_COUNTRY, NEW_GAME, SET_COUNTRIES, SET_GAME_OVER } from '../actions/map';
 import worldGeodata from "@amcharts/amcharts5-geodata/worldLow";
 import countries2 from "@amcharts/amcharts5-geodata/data/countries2";
 
@@ -11,18 +11,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case CLEAR_FOUND_COUNTRIES:
-			return Object.assign({}, state, {foundCountries: null});
-		case NEW_GAME:
-			const countries = worldGeodata.features.filter(c =>
-				countries2[c.id]?.continent === state.activeMap
-			)
-			return Object.assign({}, state, {
-				countries: countries.map(f =>
-					({id: f.properties.id, name: f.properties.name})),
-				foundCountries: null,
-				totalCountries: countries.length,
-			})
 		case FOUND_COUNTRY:
 			const currentDate = new Date();
 			const datetime = currentDate.getDate() + "/"
@@ -41,10 +29,23 @@ export default (state = initialState, action) => {
 					? [...state.foundCountries, country]
 					: [country]
 			});
-		case SET_ACTIVE_MAP:
-			return Object.assign({}, state, {activeMap: action.payload})
+		case NEW_GAME:
+			const activeMap = action.payload
+			const countries = worldGeodata.features.filter(c =>
+				countries2[c.id]?.continent === activeMap
+			)
+			return Object.assign({}, state, {
+				activeMap: activeMap,
+				countries: countries.map(f =>
+					({id: f.properties.id, name: f.properties.name})),
+				foundCountries: null,
+				gameOver: false,
+				totalCountries: countries.length,
+			})
 		case SET_COUNTRIES:
 			return Object.assign({}, state, {countries: action.payload});
+		case SET_GAME_OVER:
+			return Object.assign({}, state, {gameOver: action.payload})
 		default:
 			return state;
 	}
