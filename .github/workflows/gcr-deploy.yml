@@ -28,16 +28,16 @@ jobs:
         uses: actions/cache@master
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/yarn.lock') }}
+          key: nodeModules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             nodeModules-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm install --frozen-lockfile
         env:
           CI: true
 
       - name: Build Development
-        run: yarn build
+        run: npm build
 
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
