@@ -50,7 +50,11 @@ const Map = props => {
     root.setThemes([am5themes_Animated.new(root)])
 
     let chart = root.container.children.push(
-      am5map.MapChart.new(root, {projection: am5map.geoNaturalEarth1()})
+      am5map.MapChart.new(root, {
+        projection: am5map.geoNaturalEarth1(),
+        panX: "none",
+        panY: "none",
+      })
     );
 
     const allSeries = {

@@ -63,7 +63,7 @@ const Dashboard = props => {
   return (
     <div className={s.root}>
       <h1 className="page-title">
-        Dashboard &nbsp;<small><small>Country Guesser</small></small>
+        <small><small>Country Guesser</small></small>
       </h1>
       <Row>
         <Col lg={9}>
