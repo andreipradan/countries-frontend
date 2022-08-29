@@ -70,6 +70,7 @@ jobs:
         uses: google-github-actions/auth@v0.4.0
         with:
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          token_format: 'access_token'
           workload_identity_provider: ${{ secrets.GCR_WIP }}
 
       - name: Set up Cloud SDK
@@ -82,6 +83,9 @@ jobs:
             --quiet \
             --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
         working-directory: .docker
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
 
       # Deploy image to Cloud Run
       - name: Deploy GCR
