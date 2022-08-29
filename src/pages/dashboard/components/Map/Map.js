@@ -1,12 +1,4 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {
-  Form,
-  FormGroup,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText
-} from "reactstrap";
 import { connect } from "react-redux";
 
 import * as am5 from "@amcharts/amcharts5";
@@ -16,9 +8,9 @@ import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import countries from "@amcharts/amcharts5-geodata/data/countries2";
 
-import SearchIcon from "../../../../components/Icons/HeaderIcons/SearchIcon";
-import { foundCountry, newGame } from "../../../../actions/map";
+import { newGame } from "../../../../actions/map";
 import s from './Map.module.scss';
+import Stats from "../Stats";
 
 const Map = props => {
   const [allSeries, setAllSeries] = useState(null)
@@ -52,8 +44,6 @@ const Map = props => {
     let chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoNaturalEarth1(),
-        panX: "none",
-        panY: "none",
       })
     );
 
@@ -147,39 +137,10 @@ const Map = props => {
         : homeButton.show()
     )
   }, [homeButton, props.gameOver, props.inProgress])
+
   return (
     <div className={s.mapChart}>
-      {
-        props.inProgress && <div className={s.stats}>
-          <span className="mr-xs fw-normal">
-            <Form className="mr-3 ml-3" inline>
-              <FormGroup>
-                <InputGroup className={`input-group-no-border ${s.searchForm}`}>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText className={s.inputGroupText}>
-                      <SearchIcon className={s.headerIcon}/>
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    id="search-input"
-                    className="input-transparent"
-                    placeholder="Country"
-                    onInput={e => {
-                      e.preventDefault()
-                      const text = e.target.value.toLowerCase()
-                      if (props.countries.map(c => c.name.toLowerCase()).includes(text)) {
-                        props.dispatch(foundCountry(text))
-                        e.target.value = ""
-                      }
-                    }}
-                    autoFocus
-                  />
-                </InputGroup>
-              </FormGroup>
-            </Form>
-          </span>
-        </div>
-      }
+      <Stats />
       <div className={s.map} id="map" />
     </div>
   );

@@ -1,4 +1,10 @@
-import { FOUND_COUNTRY, NEW_GAME, SET_COUNTRIES, SET_GAME_OVER } from '../actions/map';
+import {
+	FOUND_COUNTRY,
+	NEW_GAME,
+	SET_COUNTRIES,
+	SET_GAME_OVER,
+	SET_STATE
+} from '../actions/map';
 import worldGeodata from "@amcharts/amcharts5-geodata/worldLow";
 import countries2 from "@amcharts/amcharts5-geodata/data/countries2";
 
@@ -6,6 +12,8 @@ const initialState = {
 	activeMap: null,
 	countries: null,
 	foundCountries: null,
+	gameOver: false,
+	inProgress: false,
 	totalCountries: 0,
 };
 
@@ -41,12 +49,18 @@ export default (state = initialState, action) => {
 					({id: f.properties.id, name: f.properties.name})),
 				foundCountries: null,
 				gameOver: false,
+				inProgress: false,
 				totalCountries: countries.length,
 			})
 		case SET_COUNTRIES:
 			return Object.assign({}, state, {countries: action.payload});
 		case SET_GAME_OVER:
-			return Object.assign({}, state, {gameOver: action.payload})
+			return Object.assign({}, state, {
+				gameOver: action.payload,
+				inProgress: false,
+			})
+		case SET_STATE:
+			return Object.assign({}, state, action.payload)
 		default:
 			return state;
 	}
