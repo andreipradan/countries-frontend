@@ -2,7 +2,7 @@ FROM node:10.18.0-alpine as build
 WORKDIR /app
 COPY . ./
 
-FROM fholzer/nginx-brotli:v1.21.6
+FROM nginx-alpine
 WORKDIR /etc/nginx
 ADD nginx.conf /etc/nginx/nginx.conf
 
