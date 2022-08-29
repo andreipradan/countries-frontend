@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCR_PROJECT }}
-  RUN_REGION: europe-central2
+  RUN_REGION: europe-west4
   SERVICE_NAME: country-guesser-prod
 
 jobs:
