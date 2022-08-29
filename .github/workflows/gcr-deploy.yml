@@ -81,7 +81,8 @@ jobs:
         run: |-
           gcloud builds submit \
             --quiet \
-            --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+            --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+            --gcs-logs-dir="gs://cloud-build-country-guesser-logs"
         working-directory: .docker
 
       # Deploy image to Cloud Run
