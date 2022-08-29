@@ -39,10 +39,12 @@ export default (state = initialState, action) => {
 			});
 		case NEW_GAME:
 			const activeMap = action.payload
-			const countries = worldGeodata.features.filter(c => c.id === "KN"
-        ? activeMap === "North America"
-        : countries2[c.id]?.continent === activeMap
-      )
+			const countries = activeMap !== "World"
+				? worldGeodata.features.filter(c => c.id === "KN"
+						? activeMap === "North America"
+						: countries2[c.id]?.continent === activeMap
+      		)
+				: worldGeodata.features.filter(c => c.id !== "AQ")
 			return Object.assign({}, state, {
 				activeMap: activeMap,
 				countries: countries.map(f =>

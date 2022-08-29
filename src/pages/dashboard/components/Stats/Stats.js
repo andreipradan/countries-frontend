@@ -18,11 +18,12 @@ import {secondsToTime} from "./utils";
 
 
 const Stats = props => {
-  const [counter, setCounter] = useState(0)
+	const defaultCounter = props.totalCountries * 3
+  const [counter, setCounter] = useState(defaultCounter)
 	const [modal, setModal] = useState(false)
   const [started, setStarted] = useState(false)
 
-  useEffect(() => setCounter(props.totalCountries * 10), [props.totalCountries])
+  useEffect(() => setCounter(defaultCounter), [defaultCounter, props.totalCountries])
 
   useEffect(() => {
     props.inProgress && setTimeout(() => {
@@ -39,7 +40,7 @@ const Stats = props => {
 
   const handleNewGame = () => {
     props.dispatch(newGame(props.activeMap))
-    setCounter(props.totalCountries * 10)
+    setCounter(defaultCounter)
     setStarted(false)
   }
 
@@ -68,30 +69,12 @@ const Stats = props => {
 
 	return props.activeMap && <div className={s.stats}>
 		<span className="mr-xs fw-normal">
-			{
-				props.inProgress && <InputGroup className={`input-group-no-border ${s.searchForm}`}>
-					<InputGroupAddon addonType="prepend">
-						<InputGroupText className={s.inputGroupText}>
-							<SearchIcon className={s.headerIcon}/>
-						</InputGroupText>
-					</InputGroupAddon>
-					<Input
-						id="search-input"
-						className="input-transparent"
-						placeholder="Country"
-						onInput={e => {
-							e.preventDefault()
-							const text = e.target.value.toLowerCase()
-							if (props.countries.map(c => c.name.toLowerCase()).includes(text)) {
-								props.dispatch(foundCountry(text))
-								e.target.value = ""
-							}
-						}}
-						autoFocus
-					/>
-				</InputGroup>
-			}
 			<Widget className="bg-transparent">
+				<div className="row progress-stats">
+					<p className="description deemphasize mb-xs text-white">
+						Controls
+					</p>
+				</div>
 				<ButtonGroup>
 					<Button
 						className="text-white"
@@ -113,9 +96,9 @@ const Stats = props => {
 								size="xs"
 								onClick={handleNewGame}
 							>
-							<span className="auth-btn-circle ">
-								<i className="la la-refresh"/>
-							</span>
+								<span className="auth-btn-circle ">
+									<i className="la la-refresh"/>
+								</span>
 								Restart
 							</Button>
 							<Button
@@ -124,9 +107,9 @@ const Stats = props => {
 								size="xs"
 								onClick={handleEndGame}
 							>
-							<span className="auth-btn-circle ">
-								<i className="la la-times"/>
-							</span>
+								<span className="auth-btn-circle ">
+									<i className="la la-times"/>
+								</span>
 								End game
 							</Button>
 						</>
@@ -145,17 +128,61 @@ const Stats = props => {
 						</Button>
 					}
 				</ButtonGroup>
-				<ProgressStats label="Countries found"
-											 value={props.foundCountries?.length || 0}
-											 total={props.totalCountries} dynamicLabel/>
-				<ProgressStats label="Countries remaining"
-											 value={props.countries?.length}
-											 total={props.totalCountries}/>
-				<ProgressStats label="Total countries" value={props.totalCountries}
-											 total={props.totalCountries}/>
-				<ProgressStats label="Time remaining" value={counter} dynamicLabel
-											 verbose={`${mins}:${secs}`}
-											 total={props.totalCountries * 10}/>
+				{
+					props.inProgress && <InputGroup
+						className={`input-group-no-border ${s.searchForm}`}
+					>
+						<InputGroupAddon addonType="prepend">
+							<InputGroupText className={s.inputGroupText}>
+								<SearchIcon className={s.headerIcon}/>
+							</InputGroupText>
+						</InputGroupAddon>
+						<Input
+							id="search-input"
+							className="input-transparent"
+							placeholder="Country"
+							onInput={e => {
+								e.preventDefault()
+								const text = e.target.value.toLowerCase().trim()
+								if (props.countries.map(c => c.name.toLowerCase()).includes(text)) {
+									props.dispatch(foundCountry(text))
+									e.target.value = ""
+								}
+							}}
+							autoFocus
+						/>
+					</InputGroup>
+				}
+				<ProgressStats
+					dynamicLabel
+					label="Time remaining"
+					value={counter}
+					verbose={`${mins}:${secs}`}
+					total={defaultCounter}
+				/>
+				<div className="row progress-stats">
+					<p className="description deemphasize mb-xs text-white">
+						Statistics
+					</p>
+				</div>
+				<div className="stats-row">
+					<div className="stat-item">
+						<h6 className="name">Found</h6>
+						<p className="value">{props.foundCountries?.length || 0} ({
+							((props.foundCountries?.length || 0) / props.totalCountries * 100).toFixed(2)
+						}%)</p>
+					</div>
+					<div className="stat-item">
+						<h6 className="name">Remaining</h6>
+						<p className="value">{props.countries?.length || 0} ({
+							((props.countries?.length || 0) / props.totalCountries * 100).toFixed(2)
+						}%)</p>
+					</div>
+					<div className="stat-item">
+						<h6 className="name">Total</h6>
+						<p className="value">{props.totalCountries || 0}</p>
+					</div>
+				</div>
 				<ResultsModal
 					body={"foo"}
 					isOpen={modal}

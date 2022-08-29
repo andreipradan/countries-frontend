@@ -1,4 +1,5 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
+import { Button } from "reactstrap";
 import { connect } from "react-redux";
 
 import * as am5 from "@amcharts/amcharts5";
@@ -14,15 +15,20 @@ import Stats from "../Stats";
 
 const Map = props => {
   const [allSeries, setAllSeries] = useState(null)
+  const [continentSeries, setContinentSeries] = useState(null)
   const [homeButton, setHomeButton] = useState(null)
 
   const generateSeries = (chart, root, continent) => {
     const series = chart.series.push(am5map.MapPolygonSeries.new(root, {
       geoJSON: am5geodata_worldLow,
-      include: am5geodata_worldLow.features.filter(c => c.id === "KN"
-        ? continent === "North America"
-        : countries[c.id]?.continent === continent
+      include: am5geodata_worldLow.features.filter(c =>
+        !!continent
+        ? c.id === "KN"
+          ? continent === "North America"
+          : countries[c.id]?.continent === continent
+        : true
       ).map(c => c.id),
+      exclude: ["AQ"],
     }))
     series.hide()
 
@@ -35,6 +41,13 @@ const Map = props => {
     })
     template.states.create("hover", {fill: am5.color("#354D84")})
     return series
+  }
+
+  const playWorld = () => {
+    homeButton.show()
+    continentSeries.hide()
+    allSeries.World.show()
+    props.dispatch(newGame("World"))
   }
 
   useLayoutEffect(() => {
@@ -54,6 +67,7 @@ const Map = props => {
       "North America": generateSeries(chart, root, "North America"),
       "Oceania": generateSeries(chart, root, "Oceania"),
       "South America": generateSeries(chart, root, "South America"),
+      "World": generateSeries(chart, root),
     }
     setAllSeries(allSeries)
     const continentSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
@@ -61,6 +75,7 @@ const Map = props => {
         exclude: ['antarctica'],
       }),
     );
+    setContinentSeries(continentSeries)
     continentSeries.mapPolygons.template.events.on("click", ev => {
       homeButton.show()
       continentSeries.zoomToDataItem(ev.target.dataItem)
@@ -140,6 +155,19 @@ const Map = props => {
 
   return (
     <div className={s.mapChart}>
+      {
+        !props.activeMap && <span>
+          Please select a continent or{" "}
+          <Button
+            className="text-white"
+            color="default"
+            size="xs"
+            onClick={playWorld}
+          >
+            play with all the countries
+          </Button>
+        </span>
+      }
       <Stats />
       <div className={s.map} id="map" />
     </div>
