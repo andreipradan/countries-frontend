@@ -2,7 +2,7 @@ FROM node:10.18.0-alpine as build
 WORKDIR /app
 COPY . ./
 
-FROM nginx-alpine
+FROM nginx:alpine
 WORKDIR /etc/nginx
 ADD nginx.conf /etc/nginx/nginx.conf
 
