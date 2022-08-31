@@ -1,11 +1,14 @@
-FROM node:10.18.0-alpine as build
+FROM python:3.10-alpine
+
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install poetry
+RUN poetry install
+
+COPY ./entrypoint /entrypoint
+RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
+COPY . /app
 WORKDIR /app
-COPY . ./
-
-FROM macbre/nginx-brotli
-WORKDIR /etc/nginx
-ADD nginx.conf /etc/nginx/nginx.conf
-
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/entrypoint"]
