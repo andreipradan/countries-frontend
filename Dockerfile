@@ -11,4 +11,4 @@ COPY backend /app/backend/
 COPY frontend /app/frontend/
 WORKDIR /app
 
-CMD exec gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT --chdir=/app
+CMD exec gunicorn backend.backend.wsgi:application --bind 0.0.0.0:$PORT --chdir=/app
