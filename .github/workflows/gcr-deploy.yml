@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - backend
 
 env:
   PROJECT_ID: ${{ secrets.GCR_PROJECT }}
