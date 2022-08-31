@@ -1,10 +1,12 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED 1
 
 COPY requirements.txt /requirements/
 
 RUN pip install -U pip
+
+RUN apt update && apt-get install -y gcc
 RUN pip install --no-cache-dir -r /requirements/requirements.txt && rm -rf /requirements/
 
 
