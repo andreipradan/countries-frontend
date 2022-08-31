@@ -7,6 +7,7 @@ import {
   Modal
 } from "reactstrap";
 import React, {useState} from "react";
+import s from './Results.module.scss';
 import listGroupClasses from '../../../../components/Notifications/notifications-demo/ListGroup.module.scss';
 import notificationsClasses from '../../../../components/Notifications/Notifications.module.scss';
 import { connect } from "react-redux";
@@ -24,7 +25,7 @@ const ResultsModal = props => {
       : "success"
   return <Modal isOpen={props.isOpen} toggle={props.toggle}>
     <section
-      className={`${notificationsClasses.notifications} navbar-notifications`}>
+      className={`${s.resultsModal} navbar-notifications`}>
       <header
         className={[notificationsClasses.cardHeader, 'card-header'].join(' ')}>
         <div className="text-center mb-sm text-white">
