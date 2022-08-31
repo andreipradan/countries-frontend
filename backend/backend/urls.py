@@ -17,13 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from heartbeat import views as heartbeat_views
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
-
-    # django-heartbeat
-    path('heartbeat/', heartbeat_views.index),
-    path('heartbeat/1337/', heartbeat_views.details),
 ]

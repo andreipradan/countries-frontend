@@ -140,10 +140,3 @@ sentry_sdk.init(
     integrations=[DjangoIntegration()],
     traces_sample_rate=1.0,
 )
-
-HEARTBEAT = {
-    'auth': {
-        'username': os.environ["HEARTBEAT_USERNAME"],
-        'password': os.environ["HEARTBEAT_PASSWORD"],
-    },
-}
