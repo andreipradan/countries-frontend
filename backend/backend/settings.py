@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +29,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG")) or False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.pradan.dev'] + os.getenv("ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
@@ -130,3 +134,16 @@ STATICFILES_DIRS = [str(BASE_DIR.parent / "frontend" / "static")]
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+sentry_sdk.init(
+    dsn=os.environ["SENTRY_DSN"],
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+)
+
+HEARTBEAT = {
+    'auth': {
+        'username': os.environ["HEARTBEAT_USERNAME"],
+        'password': os.environ["HEARTBEAT_PASSWORD"],
+    },
+}
