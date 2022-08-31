@@ -36,11 +36,13 @@ jobs:
         run: npm install --frozen-lockfile
         env:
           CI: true
+        working-directory: frontend
 
       - name: Build Development
         run: npm run build
         env:
           CI: false
+        working-directory: frontend
 
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
@@ -64,7 +66,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: .docker/build
+          path: frontend/.docker/build
 
       - name: Setup GCloud Auth
         id: auth
