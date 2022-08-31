@@ -66,7 +66,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: .docker/build
+          path: frontend
 
       - name: Setup GCloud Auth
         id: auth
@@ -86,7 +86,6 @@ jobs:
             --quiet \
             --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
             --gcs-log-dir="gs://cloud-build-country-guesser-logs"
-        working-directory: .docker
 
       # Deploy image to Cloud Run
       - name: Deploy GCR

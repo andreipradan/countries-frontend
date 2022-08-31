@@ -91,6 +91,20 @@ idna = ["idna (>=2.1,<4.0)"]
 dnssec = ["cryptography (>=2.6,<37.0)"]
 
 [[package]]
+name = "gunicorn"
+version = "20.1.0"
+description = "WSGI HTTP Server for UNIX"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.extras]
+eventlet = ["eventlet (>=0.24.1)"]
+gevent = ["gevent (>=1.4.0)"]
+setproctitle = ["setproctitle"]
+tornado = ["tornado (>=0.2)"]
+
+[[package]]
 name = "pymongo"
 version = "3.12.0"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
@@ -135,7 +149,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ac9b4681ceb6a5ffc2a7aefe58b183bdc04e7ad168f67c5b3171e11918969af8"
+content-hash = "02d31e1159958c894cc9271f76f8a07c01a1cb687017a8df1e3479e79cc9988b"
 
 [metadata.files]
 asgiref = []
@@ -145,6 +159,7 @@ django-cors-headers = []
 djangorestframework = []
 djongo = []
 dnspython = []
+gunicorn = []
 pymongo = []
 pytz = []
 sqlparse = []
