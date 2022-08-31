@@ -7,7 +7,8 @@ COPY requirements.txt /requirements/
 RUN pip install -U pip
 RUN pip install --no-cache-dir -r /requirements/requirements.txt && rm -rf /requirements/
 
-COPY backend frontend /app/
+COPY backend /app/backend/
+COPY frontend /app/frontend/
 WORKDIR /app
 
 CMD exec gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT --chdir=/app
