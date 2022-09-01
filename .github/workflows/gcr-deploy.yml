@@ -67,7 +67,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: .docker/build
+          path: .temp
 
       - name: Setup GCloud Auth
         id: auth
@@ -83,9 +83,11 @@ jobs:
       # Build and push image to Google Container Registry
       - name: Build & Push
         run: |
-          pwd
-          ls
-          ls frontend
+          echo pwd && pwd
+          echo ls && ls
+          echo ls frontend && ls frontend
+          echo ls .temp && ls .temp
+          
           gcloud builds submit \
             --quiet \
             --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
