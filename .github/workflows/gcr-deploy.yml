@@ -43,10 +43,7 @@ jobs:
         working-directory: frontend
 
       - name: Build Development
-        run: |
-          npm run build
-          pwd
-          ls
+        run: npm run build
         env:
           CI: false
         working-directory: frontend
@@ -64,7 +61,10 @@ jobs:
 
       # Build and push image to Google Container Registry
       - name: Build & Push
-        run: |-
+        run: |
+          pwd
+          ls
+          ls frontend
           gcloud builds submit \
             --quiet \
             --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
