@@ -45,6 +45,14 @@ jobs:
           CI: false
         working-directory: frontend
 
+      - name: Run django collect static
+        run: python manage.py collectstatic --noinput
+        env:
+          SENTRY_DSN: ''
+          SECRET_KEY: ''
+          MONGO_HOST: ''
+        working-directory: backend
+
       - name: Archive Production Artifact
         uses: actions/upload-artifact@main
         with:
