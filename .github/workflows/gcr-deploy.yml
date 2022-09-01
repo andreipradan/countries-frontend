@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: build
-          path: frontend/build
+          path: build
 
   deploy-gcr:
     name: Deploy to GCR
@@ -66,7 +66,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-          path: frontend/build
+          path: build
 
       - name: Setup GCloud Auth
         id: auth
