@@ -82,12 +82,7 @@ jobs:
 
       # Build and push image to Google Container Registry
       - name: Build & Push
-        run: |
-          echo pwd && pwd
-          echo ls && ls
-          echo ls frontend && ls frontend
-          echo ls .temp && ls .temp
-          
+        run: |-
           gcloud builds submit \
             --quiet \
             --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
