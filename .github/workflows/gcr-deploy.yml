@@ -12,9 +12,12 @@ env:
   SERVICE_NAME: country-guesser-prod
 
 jobs:
-  build:
-    name: Build React App
+  build-and-deploy:
+    name: Build React App and Deploy to Cloud Run
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - name: Checkout Repo
@@ -43,30 +46,6 @@ jobs:
         env:
           CI: false
         working-directory: frontend
-
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@main
-        with:
-          name: build
-          path: frontend/build
-
-  deploy-gcr:
-    name: Deploy to GCR
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: build
-          path: .github/build
 
       - name: Setup GCloud Auth
         id: auth
