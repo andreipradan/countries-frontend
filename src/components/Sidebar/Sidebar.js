@@ -9,7 +9,6 @@ import s from './Sidebar.module.scss';
 import LinksGroup from './LinksGroup';
 
 import {changeActiveSidebarItem} from '../../actions/navigation';
-import {logoutUser} from '../../actions/user';
 import HomeIcon from '../Icons/SidebarIcons/HomeIcon';
 import TypographyIcon from '../Icons/SidebarIcons/TypographyIcon';
 import TablesIcon from '../Icons/SidebarIcons/TablesIcon';
@@ -34,12 +33,6 @@ class Sidebar extends React.Component {
         activeItem: '',
     };
 
-    constructor(props) {
-        super(props);
-
-        this.doLogout = this.doLogout.bind(this);
-    }
-
     componentDidMount() {
         this.element.addEventListener('transitionend', () => {
             if (this.props.sidebarOpened) {
@@ -63,10 +56,6 @@ class Sidebar extends React.Component {
 
     dismissAlert(id) {
         this.props.dispatch(dismissAlert(id));
-    }
-
-    doLogout() {
-        this.props.dispatch(logoutUser());
     }
 
     render() {

@@ -1,51 +1,46 @@
+import Cookie from 'js-cookie'
+import { toast } from "react-toastify";
+
+import apiClient from '../api'
+import { parseErrors } from "./helpers";
+
+export const LOGIN_START = 'LOGIN_START'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
-export function receiveLogin() {
-    return {
-        type: LOGIN_SUCCESS
-    };
-}
+const loginSuccess = (token, user) => {
+  return {type: LOGIN_SUCCESS, token: token, user: user}
+};
 
-function loginError(payload) {
+
+const loginError = errors => {
     return {
         type: LOGIN_FAILURE,
-        payload,
+        errors: errors,
     };
 }
 
-function requestLogout() {
-    return {
-        type: LOGOUT_REQUEST,
-    };
-}
 
-export function receiveLogout() {
-    return {
-        type: LOGOUT_SUCCESS,
-    };
-}
+const logoutSuccess = () => ({type: LOGOUT_SUCCESS});
+export const logout = (message = "Logged out successfully") => dispatch => {
+  Cookie.remove('expires_at');
+  Cookie.remove('token');
+  Cookie.remove('user');
+  dispatch(logoutSuccess());
+  toast.info(message,{ hideProgressBar: true, position: "top-center" })
+};
 
-// Logs the user out
-export function logoutUser() {
-    return (dispatch) => {
-        dispatch(requestLogout());
-        localStorage.removeItem('authenticated');
-        dispatch(receiveLogout());
-    };
-}
+const loginStart = () => ({type: LOGIN_START});
+export const loginUser = creds => dispatch => {
+  dispatch(loginStart());
 
-export function loginUser(creds) {
-    return (dispatch) => {
-
-        dispatch(receiveLogin());
-
-        if (creds.email.length > 0 && creds.password.length > 0) {
-            localStorage.setItem('authenticated', true)
-        } else {
-            dispatch(loginError('Something was wrong. Try again'));
-        }
-    }
-}
+  apiClient.post('api/login/', creds)
+    .then(response => {
+      Cookie.set('expires_at', response.data.expires_at);
+      Cookie.set('token', response.data.token);
+      Cookie.set('user', response.data.user);
+      dispatch(loginSuccess(response.data.token, response.data.user))
+    })
+    .catch(error => dispatch(loginError(parseErrors(error))))
+};

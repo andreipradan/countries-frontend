@@ -31,7 +31,7 @@ import SearchIcon from "../Icons/HeaderIcons/SearchIcon";
 import ArrowIcon from "../Icons/HeaderIcons/ArrowIcon";
 
 
-import { logoutUser } from "../../actions/user";
+import {logout} from "../../actions/user";
 import {
   openSidebar,
   closeSidebar,
@@ -88,7 +88,7 @@ class Header extends React.Component {
   }
 
   doLogout() {
-    this.props.dispatch(logoutUser());
+    this.props.dispatch(logout());
   }
 
   toggleMessagesDropdown() {
