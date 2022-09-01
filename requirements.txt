@@ -1,5 +1,7 @@
-django==4.1
+collectfast==2.2.0
+django==4.0
 django-cors-headers==3.13.0
+django-storages[google]==1.13.1
 djangorestframework==3.13.1
 djongo==1.3.6
 dnspython==2.2.1

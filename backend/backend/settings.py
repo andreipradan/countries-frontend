@@ -125,14 +125,22 @@ USE_I18N = True
 
 USE_TZ = True
 
+# django-storages
+GS_BUCKET_NAME = 'countries-static'
+GS_DEFAULT_ACL = "publicRead"
+INSTALLED_APPS += ["storages"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_URL = 'static/'
 STATICFILES_DIRS = [str(BASE_DIR.parent / "frontend" / "build" / "static")]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "google_storages.StaticRootGoogleCloudStorage"
+DEFAULT_FILE_STORAGE = 'google_storages.MediaRootGoogleCloudStorage'
+
+INSTALLED_APPS = ["collectfast"] + INSTALLED_APPS
+COLLECTFAST_STRATEGY = "collectfast.strategies.gcloud.GoogleCloudStrategy"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -144,3 +152,7 @@ sentry_sdk.init(
     integrations=[DjangoIntegration()],
     traces_sample_rate=1.0,
 )
+
+CORS_ALLOWED_ORIGINS = [
+    "https://countries.pradan.dev"
+]
