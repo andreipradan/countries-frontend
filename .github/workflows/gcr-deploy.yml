@@ -46,7 +46,7 @@ jobs:
         working-directory: frontend
 
       - name: Run django collect static
-        run: python manage.py collectstatic --noinput
+        run: pip install django && python manage.py collectstatic --noinput
         env:
           SENTRY_DSN: ''
           SECRET_KEY: ''
