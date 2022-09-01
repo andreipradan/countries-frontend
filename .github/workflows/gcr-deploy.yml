@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-and-deploy:
-    name: Build React App and Deploy to Cloud Run
+    name: Build frontend and Deploy
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -35,6 +35,7 @@ jobs:
           key: nodeModules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             nodeModules-
+
       - name: Install dependencies
         run: npm install --frozen-lockfile
         env:
@@ -42,7 +43,10 @@ jobs:
         working-directory: frontend
 
       - name: Build Development
-        run: npm run build
+        run: |
+          npm run build
+          pwd
+          ls
         env:
           CI: false
         working-directory: frontend
