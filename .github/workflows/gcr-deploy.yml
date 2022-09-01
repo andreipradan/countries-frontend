@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: build
-          path: frontend/build
+          path: build
 
   deploy-gcr:
     name: Deploy to GCR
