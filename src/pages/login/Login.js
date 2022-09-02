@@ -14,7 +14,6 @@ import {
 } from 'reactstrap';
 import Widget from '../../components/Widget';
 import {loginUser} from '../../actions/user';
-import microsoft from '../../assets/microsoft.png';
 
 const Login = props => {
 	const [email, setEmail] = useState('')
@@ -37,9 +36,7 @@ const Login = props => {
 				className="widget-auth mx-auto"
 				title={<h3 className="mt-0">Login to your Web App</h3>}
 			>
-				<p className="widget-auth-info">
-					Use your email to sign in.
-				</p>
+				<p className="widget-auth-info">Use your email to sign in.</p>
 				<form onSubmit={doLogin}>
 					{
 						props.errors?.map((item, index) => (
@@ -92,18 +89,6 @@ const Login = props => {
 						</p>
 						<Link className="d-block text-center mb-4" to="register">Create
 							an Account</Link>
-						<div className="social-buttons">
-							<Button color="primary" className="social-button">
-								<i className="social-icon social-google"/>
-								<p className="social-text">GOOGLE</p>
-							</Button>
-							<Button color="success" className="social-button">
-								<i className="social-icon social-microsoft"
-									 style={{backgroundImage: `url(${microsoft})`}}/>
-								<p className="social-text"
-									 style={{color: '#fff'}}>MICROSOFT</p>
-							</Button>
-						</div>
 					</div>
 				</form>
 			</Widget>
