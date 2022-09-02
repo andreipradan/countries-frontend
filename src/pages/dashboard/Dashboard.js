@@ -16,7 +16,7 @@ import peopleA1 from "../../assets/people/a1.jpg";
 import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
-import {fetchUsers} from "../../actions/user";
+import { fetchUsers } from "../../actions/map";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -30,6 +30,12 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     if (!this.props.users) {
+      this.props.dispatch(fetchUsers(this.props.token))
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.user !== prevProps.user) {
       this.props.dispatch(fetchUsers(this.props.token))
     }
   }
@@ -81,7 +87,8 @@ class Dashboard extends React.Component {
             <Widget
               className="bg-transparent"
               settings
-              refresh
+              loading={this.props.loading}
+              refresh={() => this.props.dispatch(fetchUsers(this.props.token))}
               close
             >
               <p className="fw-semi-bold text-white">Top Scores</p>
@@ -402,4 +409,4 @@ class Dashboard extends React.Component {
     );
   }
 }
-export default connect(state => state.auth)(Dashboard);
+export default connect(state => ({...state.map, token: state.auth.token, user: state.auth.user}))(Dashboard);

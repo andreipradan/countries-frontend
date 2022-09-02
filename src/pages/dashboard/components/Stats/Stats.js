@@ -11,7 +11,7 @@ import {connect} from "react-redux";
 import ProgressStats from "../ProgressStats";
 import ResultsModal from "../ResultsModal"
 import Widget from "../../../../components/Widget";
-import {foundCountry, newGame, setGameOver, setState} from "../../../../actions/map";
+import { foundCountry, newGame, setGameOver, setState } from "../../../../actions/map";
 import s from "../Map/Map.module.scss";
 import SearchIcon from "../../../../components/Icons/HeaderIcons/SearchIcon";
 import {secondsToTime} from "./utils";
@@ -33,7 +33,14 @@ const Stats = props => {
   })
 
   const handleEndGame = () => {
-    props.dispatch(setGameOver(true))
+		const score = props.totalCountries - props.countries.length
+		const shouldUpdateScore = score > props.user.score
+    props.dispatch(setGameOver(
+			props.token,
+			score,
+			props.user.id,
+			shouldUpdateScore,
+		))
     setStarted(false)
     setModal(true)
   }
@@ -192,4 +199,8 @@ const Stats = props => {
 		</span>
 	</div>
 }
-export default connect(state => state.map)(Stats)
+export default connect(state => ({
+	...state.map,
+	user: state.auth.user,
+	token: state.auth.token,
+}))(Stats)

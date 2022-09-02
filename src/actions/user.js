@@ -4,9 +4,6 @@ import { toast } from "react-toastify";
 import apiClient from '../api'
 import { parseErrors } from "./helpers";
 
-export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE'
-export const FETCH_USERS_START = 'FETCH_USERS_START'
-export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS'
 
 export const LOGIN_START = 'LOGIN_START'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -17,8 +14,6 @@ export const REGISTER_START = 'REGISTER_START'
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 
-
-const fetchUsersError = errors => ({ type: FETCH_USERS_FAILURE, errors: errors})
 
 const loginError = errors => ({ type: LOGIN_FAILURE, errors: errors})
 const loginSuccess = (token, user) => ({type: LOGIN_SUCCESS, token: token, user: user})
@@ -55,20 +50,3 @@ export const registerUser = payload => dispatch => {
     })
     .catch(error => dispatch(registerErrors(parseErrors(error))))
 };
-
-export const fetchUsers = token => dispatch => {
-  dispatch({type: FETCH_USERS_START})
-  apiClient.get(
-    "api/users/",
-    {headers: {'Authorization': 'Token ' + token}})
-    .then(response => {
-      dispatch({type: FETCH_USERS_SUCCESS, users: response.data})
-    })
-    .catch(error => {
-      const logoutErrors = ['Token expired.', 'Invalid token.'];
-      if (logoutErrors.includes(error.response?.data?.detail)) {
-        dispatch(logout("Session expired. Please log in again"))
-      }
-      dispatch(fetchUsersError([error.message]))
-    });
-}

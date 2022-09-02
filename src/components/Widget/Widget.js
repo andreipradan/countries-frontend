@@ -29,7 +29,7 @@ class Widget extends React.Component {
     close: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     fullscreen: PropTypes.bool,
     collapse: PropTypes.bool,
-    refresh: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    refresh: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.func]),
     settings: PropTypes.bool,
     settingsInverse: PropTypes.bool,
     tooltipPlacement: PropTypes.string,
@@ -150,6 +150,7 @@ class Widget extends React.Component {
       fullscreen,
       collapse,
       refresh,
+      loading,
       settings,
       settingsInverse,
       tooltipPlacement,
@@ -190,7 +191,7 @@ class Widget extends React.Component {
       <section
         style={{display: hideWidget ? 'none' : ''}}
         className={
-          classNames('widget', {'fullscreened' : !!fullscreened, 'collapsed' : !!collapseWidget}, s.widget, className, (reloading || fetchingData) ? s.reloading : '')
+          classNames('widget', {'fullscreened' : !!fullscreened, 'collapsed' : !!collapseWidget}, s.widget, className, (loading || fetchingData) ? s.reloading : '')
         } {...attributes}
         >
         {
@@ -213,7 +214,10 @@ class Widget extends React.Component {
                 /></button>
               )}
               {refresh && (
-                <button onClick={this.handleReload} id={`reloadId-${randomId}`}>
+                <button
+                  onClick={typeof refresh === "boolean" ? this.handleReload : refresh}
+                  id={`reloadId-${randomId}`}
+                >
                   {typeof refresh === 'string' ?
                     <strong className="text-gray-light">{refresh}</strong> :
                     <i className="la la-refresh" />}
@@ -331,7 +335,7 @@ class Widget extends React.Component {
         >
 
           <div className={`${s.widgetBody} widget-body ${bodyClass}`}>
-            {reloading || fetchingData ?  <Loader className={s.widgetLoader} size={40}/> : customBody ? (
+            {loading || fetchingData ?  <Loader className={s.widgetLoader} size={40}/> : customBody ? (
                 <div className="jumbotron handle bg-default text-white mb-0">
                 <div className="container">
                   <h1>Draggable story!</h1>
