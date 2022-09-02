@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import apiClient from '../api'
 import { parseErrors } from "./helpers";
+import {getDisplayName} from "../pages/dashboard/utils";
 
 
 export const LOGIN_START = 'LOGIN_START'
@@ -45,7 +46,7 @@ export const registerUser = payload => dispatch => {
   apiClient.post('api/register/', payload.creds)
     .then(response => {
       dispatch({type: REGISTER_SUCCESS})
-      toast.success(`You've been registered successfully ${response.data.full_name}`);
+      toast.success(`You've been registered successfully, ${getDisplayName(response.data)}!`);
       payload.history.push('/login')
     })
     .catch(error => dispatch(registerErrors(parseErrors(error))))

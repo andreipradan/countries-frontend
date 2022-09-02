@@ -40,6 +40,7 @@ import avatar from "../../assets/people/a7.jpg";
 
 import s from "./Header.module.scss";
 import "animate.css";
+import {getDisplayName} from "../../pages/dashboard/utils";
 
 const Header = props => {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
@@ -97,7 +98,7 @@ const Header = props => {
             <span className={`${s.avatar} rounded-circle thumb-sm float-left`}>
               <img src={avatar} alt="..." />
             </span>
-            <span className={`small d-sm-down-none ${s.accountCheck}`}>{props.user.full_name}</span>
+            <span className={`small d-sm-down-none ${s.accountCheck}`}>{getDisplayName(props.user)}</span>
             <Badge className={`d-sm-down-none ${s.badge}`} color="danger">
               9
             </Badge>

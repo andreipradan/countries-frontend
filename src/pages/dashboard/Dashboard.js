@@ -17,6 +17,7 @@ import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
 import { fetchUsers } from "../../actions/map";
+import {getDisplayName} from "./utils";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -68,11 +69,6 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const getDisplayName = user => {
-      if (!(user.first_name || user.last_name)) return user.email.split('@')[0]
-      return user.first_name + ' ' + user.last_name
-    }
-
     return (
       <div className={s.root}>
         <Row>
