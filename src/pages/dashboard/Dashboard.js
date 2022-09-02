@@ -16,6 +16,7 @@ import peopleA1 from "../../assets/people/a1.jpg";
 import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
+import {fetchUsers} from "../../actions/user";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -25,6 +26,12 @@ class Dashboard extends React.Component {
       checkedArr: [false, false, false],
     };
     this.checkTable = this.checkTable.bind(this);
+  }
+
+  componentDidMount() {
+    if (!this.props.users) {
+      this.props.dispatch(fetchUsers(this.props.token))
+    }
   }
 
   checkTable(id) {
@@ -55,6 +62,11 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    const getDisplayName = user => {
+      if (!(user.first_name || user.last_name)) return user.email.split('@')[0]
+      return user.first_name + ' ' + user.last_name
+    }
+
     return (
       <div className={s.root}>
         <Row>
@@ -73,33 +85,16 @@ class Dashboard extends React.Component {
               close
             >
               <p className="fw-semi-bold text-white">Top Scores</p>
-              <ProgressStats
-                dynamicLabel
-                label="Albert"
-                value={255}
-                total={255}
-              />
-
-              <ProgressStats
-                dynamicLabel
-                label="Banana man"
-                value={231}
-                total={255}
-              />
-
-              <ProgressStats
-                dynamicLabel
-                label="Tick"
-                value={106}
-                total={255}
-              />
-
-              <ProgressStats
-                dynamicLabel
-                label="Spoon"
-                value={66}
-                total={255}
-              />
+              {
+                this.props.users?.map((user, i) => <ProgressStats
+                  key={i}
+                  dynamicLabel
+                  label={getDisplayName(user)}
+                  value={user.score}
+                  total={this.props.topScore}
+                />
+                )
+              }
             </Widget>
           </Col>
         </Row>
@@ -407,5 +402,4 @@ class Dashboard extends React.Component {
     );
   }
 }
-
-export default connect(store => store.map)(Dashboard);
+export default connect(state => state.auth)(Dashboard);
