@@ -77,8 +77,8 @@ class Layout extends React.Component {
                   timeout={200}
                 >
                   <Switch>
-                    <Route path="/app/main" exact render={() => <Redirect to="/app/main/dashboard" />} />
-                    <Route path="/app/main/dashboard" exact component={Dashboard} />
+                    <Route path="/app" exact render={() => <Redirect to="/app/dashboard" />} />
+                    <Route path="/app/dashboard" exact component={Dashboard} />
                     <Route path="/app/components/icons" exact component={UIIcons} />
                     <Route path="/app/notifications" exact component={UINotifications} />
                     <Route path="/app/components/charts" exact component={Charts} />

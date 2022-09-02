@@ -31,14 +31,13 @@ const App = props => <div>
     />
     <HashRouter>
         <Switch>
-            <Route path="/" exact render={() => <Redirect to="/app/main"/>}/>
-            <Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>
+            <Route path="/" exact render={() => <Redirect to="/app"/>}/>
             <PrivateRoute path="/app" isAuthenticated={props.isAuthenticated} component={LayoutComponent}/>
             <Route path="/register" exact component={Register}/>
             <Route path="/login" exact component={Login}/>
             <Route path="/error" exact component={ErrorPage}/>
             <Route component={ErrorPage}/>
-            <Redirect from="*" to="/app/main/dashboard"/>
+            <Redirect from="*" to="/app/dashboard"/>
         </Switch>
     </HashRouter>
 </div>
