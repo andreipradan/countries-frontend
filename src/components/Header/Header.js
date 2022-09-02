@@ -96,7 +96,7 @@ const Header = props => {
         >
           <DropdownToggle nav caret style={{ color: "#C1C3CF", padding: 0 }}>
             <span className={`${s.avatar} rounded-circle thumb-sm float-left`}>
-              <img src={avatar} alt="..." />
+              <img src={`https://ui-avatars.com/api/?color=d5d5d5&background=474d84&length=2&rounded=true&size=128&font-size=0.35&bold=true&name=${getDisplayName(props.user, '+')}`} alt="..." />
             </span>
             <span className={`small d-sm-down-none ${s.accountCheck}`}>{getDisplayName(props.user)}</span>
             <Badge className={`d-sm-down-none ${s.badge}`} color="danger">

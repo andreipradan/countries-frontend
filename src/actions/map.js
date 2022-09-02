@@ -12,21 +12,21 @@ export const SET_COUNTRIES = 'SET_COUNTRIES';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
 export const SET_STATE = 'SET_STATE';
 
-export const SET_SCORE_FAILURE = 'SET_SCORE_FAILURE'
-export const USER_SCORE_UPDATE = "USER_SCORE_UPDATE"
+export const USER_SCORE_FAILURE = 'USER_SCORE_FAILURE'
+export const USER_SCORE_UPDATE = 'USER_SCORE_UPDATE'
 
 const fetchUsersError = errors => ({ type: FETCH_USERS_FAILURE, errors: errors})
 export const foundCountry = payload => ({type: FOUND_COUNTRY, payload})
 export const newGame = payload => ({type: NEW_GAME, payload})
 export const setState = payload => ({type: SET_STATE, payload})
 
-export const fetchUsers = token => dispatch => {
+export const fetchUsers = (token, userId) => dispatch => {
   dispatch({type: FETCH_USERS_START})
   apiClient.get(
     "api/users/",
     {headers: {'Authorization': 'Token ' + token}})
     .then(response => {
-      dispatch({type: FETCH_USERS_SUCCESS, users: response.data})
+      dispatch({type: FETCH_USERS_SUCCESS, users: response.data, userId: userId})
     })
     .catch(error => {
       const logoutErrors = ['Token expired.', 'Invalid token.'];
@@ -46,6 +46,6 @@ export const setGameOver = (token, score, userId, shouldUpdateScore) => dispatch
 			.then(() => {
 				dispatch({type: USER_SCORE_UPDATE, score})
 			})
-			.catch(error => dispatch({type: SET_SCORE_FAILURE, errors: parseErrors(error)}))
+			.catch(error => dispatch({type: USER_SCORE_FAILURE, errors: parseErrors(error)}))
 	dispatch({type: SET_GAME_OVER})
 }

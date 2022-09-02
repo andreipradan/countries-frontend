@@ -31,13 +31,13 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     if (!this.props.users) {
-      this.props.dispatch(fetchUsers(this.props.token))
+      this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.user !== prevProps.user) {
-      this.props.dispatch(fetchUsers(this.props.token))
+      this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))
     }
   }
 
@@ -84,7 +84,7 @@ class Dashboard extends React.Component {
               className="bg-transparent"
               settings
               loading={this.props.loading}
-              refresh={() => this.props.dispatch(fetchUsers(this.props.token))}
+              refresh={() => this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))}
               close
             >
               <p className="fw-semi-bold text-white">Top Scores</p>

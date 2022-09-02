@@ -8,7 +8,6 @@ import {
 	REGISTER_SUCCESS,
 	REGISTER_START,
 } from '../actions/user';
-import { USER_SCORE_UPDATE } from "../actions/map"
 
 const initialState = {
 	isFetching: false,
@@ -43,9 +42,6 @@ export default function auth(state = initialState, action) {
 		case REGISTER_FAILURE: return fail(state, action.errors)
 		case REGISTER_SUCCESS: return success(state, action.token, action.user)
 		case REGISTER_START: return start(state)
-		case USER_SCORE_UPDATE: return Object.assign({}, state, {
-			user: {...state.user, score: action.score}
-		})
 		default:
 			return state;
 	}

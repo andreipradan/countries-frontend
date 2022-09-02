@@ -5,8 +5,8 @@ import {
 	FOUND_COUNTRY,
 	NEW_GAME,
 	SET_COUNTRIES,
-	SET_GAME_OVER, SET_SCORE_FAILURE,
-	SET_STATE
+	SET_GAME_OVER, USER_SCORE_FAILURE,
+	SET_STATE, USER_SCORE_UPDATE,
 } from '../actions/map';
 import worldGeodata from "@amcharts/amcharts5-geodata/worldLow";
 import countries2 from "@amcharts/amcharts5-geodata/data/countries2";
@@ -19,6 +19,8 @@ const initialState = {
 	gameOver: false,
 	inProgress: false,
 	loading: false,
+	me: null,
+	series: null,
 	topScore: 0,
 	totalCountries: 0,
 	users: null,
@@ -39,6 +41,7 @@ export default (state = initialState, action) => {
 				loading: false,
 				users: users,
 				topScore: users[0].score,
+				me: users.find(u => u.id === action.userId)
 			})
 		case FOUND_COUNTRY:
 			const currentDate = new Date();
@@ -82,12 +85,20 @@ export default (state = initialState, action) => {
 				gameOver: true,
 				inProgress: false,
 			})
-		case SET_SCORE_FAILURE:
+		case USER_SCORE_FAILURE:
 			return Object.assign({}, state, {
 				gameOver: true,
 				inProgress: false,
 				errors: action.errors,
 			})
+		case USER_SCORE_UPDATE: return Object.assign({}, state, {
+			me: {...state.me, score: action.score},
+			users: state.users.map(user =>
+				user.id !== state.me.id
+					? user
+					: {...user, score: action.score}
+			)
+		})
 		case SET_STATE:
 			return Object.assign({}, state, action.payload)
 		default:
