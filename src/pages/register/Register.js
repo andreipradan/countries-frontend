@@ -8,11 +8,11 @@ import { registerUser, registerErrors } from '../../actions/user';
 const Register = props => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [confirmPassword, setConfirmPassword] = useState('')
+	const [password2, setPassword2] = useState('')
 
 	const changeEmail = e => setEmail(e.target.value)
 	const changePassword = e => setPassword(e.target.value)
-	const changeConfirmPassword = e => setConfirmPassword(e.target.value)
+	const changeConfirmPassword = e => setPassword2(e.target.value)
 
 	const checkPassword = () => {
 		if (!password) {
@@ -24,10 +24,13 @@ const Register = props => {
 
   const doRegister = e => {
 			e.preventDefault();
-			if (password !== confirmPassword) {
+			if (password !== password2) {
 				checkPassword();
 			} else {
-				props.dispatch(registerUser({email: email, password: password}))
+				props.dispatch(registerUser({
+					creds: {email: email, password: password, password2: password2},
+					history: props.history
+				}))
 			}
     }
 
@@ -87,7 +90,7 @@ const Register = props => {
 									</InputGroupText>
 								</InputGroupAddon>
 								<Input id="confirmPassword" className="input-transparent pl-3"
-											 value={confirmPassword}
+											 value={password2}
 											 onChange={changeConfirmPassword}
 											 type="password"
 											 required name="confirmPassword" placeholder="Confirm"/>

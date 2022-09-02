@@ -17,17 +17,15 @@ export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 const loginError = errors => ({ type: LOGIN_FAILURE, errors: errors})
 const loginSuccess = (token, user) => ({type: LOGIN_SUCCESS, token: token, user: user})
 const logoutSuccess = () => ({type: LOGOUT_SUCCESS})
-
 export const registerErrors = errors => ({ type: REGISTER_FAILURE, errors: errors})
 
 export const loginUser = creds => dispatch => {
-  dispatch({type: LOGIN_START});
-
+  dispatch(({type: LOGIN_START}))
   apiClient.post('api/login/', creds)
     .then(response => {
       Cookie.set('expires_at', response.data.expires_at);
       Cookie.set('token', response.data.token);
-      Cookie.set('user', response.data.user);
+      Cookie.set('user', JSON.stringify(response.data.user));
       dispatch(loginSuccess(response.data.token, response.data.user))
     })
     .catch(error => dispatch(loginError(parseErrors(error))))
@@ -41,16 +39,14 @@ export const logout = (message = "Logged out successfully") => dispatch => {
   toast.info(message,{ hideProgressBar: true, position: "top-center" })
 };
 
-export const registerUser = creds => dispatch => {
+export const registerUser = payload => dispatch => {
   dispatch({type: REGISTER_START});
 
-  apiClient.post('api/register/', creds)
+  apiClient.post('api/register/', payload.creds)
     .then(response => {
-      Cookie.set('expires_at', response.data.expires_at);
-      Cookie.set('token', response.data.token);
-      Cookie.set('user', response.data.user);
-      dispatch(loginSuccess(response.data.token, response.data.user))
-      toast.success("You've been registered successfully");
+      dispatch({type: REGISTER_SUCCESS})
+      toast.success(`You've been registered successfully ${response.data.full_name}`);
+      payload.history.push('/login')
     })
     .catch(error => dispatch(registerErrors(parseErrors(error))))
 };
