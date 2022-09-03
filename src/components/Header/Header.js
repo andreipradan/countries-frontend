@@ -63,15 +63,7 @@ const Header = props => {
   }
 
   return <Navbar className={`d-print-none `}>
-    <div className={s.burger}>
-      <NavLink
-          onClick={toggleSidebar}
-          className={`d-md-none ${s.navItem} text-white`}
-          href="#"
-        >
-          <BurgerIcon className={s.headerIcon} />
-        </NavLink>
-    </div>
+    <div className={s.burger} />
     <div className={`d-print-none ${s.root}`}>
       <UncontrolledAlert
         className={`${s.alert} mr-3 d-lg-down-none animate__animated animate__bounceIn animate__delay-1s`}
@@ -253,6 +245,17 @@ const Header = props => {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
+        <NavItem className="d-md-none">
+          <NavLink
+            onClick={toggleSidebar}
+            className={`${s.navItem} text-white`}
+            href="#"
+          >
+            <i className="fa fa-bars" />
+          </NavLink>
+        </NavItem>
+        <NavItem className={`${s.divider} d-sm-block`} />
+
         <NavItem>
           <NavLink
             onClick={() => props.dispatch(logout())}
