@@ -37,14 +37,14 @@ export const fetchUsers = (token, userId) => dispatch => {
     });
 }
 
-export const setGameOver = (token, score, userId, shouldUpdateScore) => dispatch => {
+export const setGameOver = (token, score, userId, gameTypeId, shouldUpdateScore) => dispatch => {
 	if (shouldUpdateScore)
-		apiClient.patch(
-			`api/users/${userId}/`,
-			{score: score},
+		apiClient.post(
+			`api/users/${userId}/scores/`,
+			{score: score, game_type: gameTypeId},
 			{headers: {Authorization: `Token ${token}`}})
-			.then(() => {
-				dispatch({type: USER_SCORE_UPDATE, score})
+			.then(response => {
+				dispatch({type: USER_SCORE_UPDATE, score: response.data, gameTypeId})
 			})
 			.catch(error => dispatch({type: USER_SCORE_FAILURE, errors: parseErrors(error)}))
 	dispatch({type: SET_GAME_OVER})

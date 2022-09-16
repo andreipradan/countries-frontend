@@ -92,11 +92,14 @@ export default (state = initialState, action) => {
 				errors: action.errors,
 			})
 		case USER_SCORE_UPDATE: return Object.assign({}, state, {
-			me: {...state.me, score: action.score},
+			me: {
+				...state.me,
+				scores: [...state.me.scores, action.score]
+			},
 			users: state.users.map(user =>
 				user.id !== state.me.id
 					? user
-					: {...user, score: action.score}
+					: {...user, scores: [...user.scores, action.score]}
 			)
 		})
 		case SET_STATE:

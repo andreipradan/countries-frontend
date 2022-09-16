@@ -15,6 +15,7 @@ import { foundCountry, newGame, setGameOver, setState } from "../../../../action
 import s from "../Map/Map.module.scss";
 import SearchIcon from "../../../../components/Icons/HeaderIcons/SearchIcon";
 import {secondsToTime} from "./utils";
+import {getGameTypeId, getTopScore} from "../../utils";
 
 
 const Stats = props => {
@@ -34,11 +35,13 @@ const Stats = props => {
 
   const handleEndGame = () => {
 		const score = props.totalCountries - props.countries.length
-		const shouldUpdateScore = score > props.user.score
+		const oldScore = getTopScore(props.me, props.activeMap)
+		const shouldUpdateScore = oldScore ? score > oldScore : true
     props.dispatch(setGameOver(
 			props.token,
 			score,
-			props.user.id,
+			props.me.id,
+			getGameTypeId(props.activeMap),
 			shouldUpdateScore,
 		))
     setStarted(false)
@@ -201,6 +204,5 @@ const Stats = props => {
 }
 export default connect(state => ({
 	...state.map,
-	user: state.auth.user,
 	token: state.auth.token,
 }))(Stats)

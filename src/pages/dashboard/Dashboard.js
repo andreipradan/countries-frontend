@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Progress, Table, Label, Input } from "reactstrap";
+import {Row, Col, Progress, Table, Label, Input, Button} from "reactstrap";
 import { connect } from "react-redux";
 
 
@@ -17,7 +17,7 @@ import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
 import { fetchUsers } from "../../actions/map";
-import {getDisplayName} from "./utils";
+import { getDisplayName, getTopScore } from "./utils";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -80,25 +80,42 @@ class Dashboard extends React.Component {
           <Col lg={1} />
 
           <Col lg={3}>
-            <Widget
-              className="bg-transparent"
-              settings
-              loading={this.props.loading}
-              refresh={() => this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))}
-              close
-            >
-              <p className="fw-semi-bold text-white">Top Scores</p>
-              {
-                this.props.users?.map((user, i) => <ProgressStats
-                  key={i}
-                  dynamicLabel
-                  label={getDisplayName(user)}
-                  value={user.score}
-                  total={this.props.topScore}
-                />
-                )
-              }
-            </Widget>
+            {
+              this.props.activeMap
+              ? <Widget
+                  className="bg-transparent"
+                  loading={this.props.loading}
+                  refresh={() => this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))}
+                  close
+                >
+                  <p className="fw-semi-bold text-white">Top {this.props.activeMap} Scores</p>
+                  {
+                    this.props.users
+                      ? this.props.users?.slice(0, 10).map((user, i) => <ProgressStats
+                        key={i}
+                        dynamicLabel
+                        label={getDisplayName(user)}
+                        value={getTopScore(user, this.props.activeMap) || 0}
+                        total={this.props.topScore}
+                      />
+                      )
+                      : <p className="text-warning small">
+                        Failed to fetch scores [{this.props.errors}]
+                        <Button
+                          className="text-warning"
+                          color="transparent"
+                          size="xs"
+                          onClick={() => this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))}
+                        >
+                          <span className="auth-btn-circle ">
+                            <i className="la la-refresh"/>
+                          </span>
+                        </Button>
+                    </p>
+                  }
+                </Widget>
+                : "Select a game type"
+            }
           </Col>
         </Row>
 
