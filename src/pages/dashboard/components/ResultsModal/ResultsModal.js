@@ -18,9 +18,9 @@ const ResultsModal = props => {
   if (activeTab === "countries")
     countries = countries.sort((a, b) => a.name > b.name ? 1 : -1)
 
-  const color = props.foundCountries?.length < props.totalCountries * 30 / 100
+  const color = props.foundCountries?.length < props.totalCountries * 10 / 100
     ? "danger"
-    : props.foundCountries?.length < props.totalCountries * 60 /100
+    : props.foundCountries?.length < props.totalCountries * 35 /100
       ? "warning"
       : "success"
   return <Modal isOpen={props.isOpen} toggle={props.toggle}>

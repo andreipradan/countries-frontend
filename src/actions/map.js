@@ -8,7 +8,6 @@ export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS'
 
 export const FOUND_COUNTRY = 'FOUND_COUNTRY';
 export const NEW_GAME = 'NEW_GAME';
-export const SET_COUNTRIES = 'SET_COUNTRIES';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
 export const SET_STATE = 'SET_STATE';
 

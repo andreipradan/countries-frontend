@@ -4,7 +4,6 @@ import {
 	FETCH_USERS_SUCCESS,
 	FOUND_COUNTRY,
 	NEW_GAME,
-	SET_COUNTRIES,
 	SET_GAME_OVER, USER_SCORE_FAILURE,
 	SET_STATE, USER_SCORE_UPDATE,
 } from '../actions/map';
@@ -16,6 +15,7 @@ const initialState = {
 	countries: null,
 	errors: null,
 	foundCountries: null,
+	gameCounter: 0,
 	gameOver: false,
 	inProgress: false,
 	loading: false,
@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
 				errors: null,
 				loading: false,
 				users: users,
-				topScore: users[0].score,
+				topScore: users[0].score,  // TODO: update with new scores per game type
 				me: users.find(u => u.id === action.userId)
 			})
 		case FOUND_COUNTRY:
@@ -74,12 +74,11 @@ export default (state = initialState, action) => {
 				countries: countries.map(f =>
 					({id: f.properties.id, name: f.properties.name})),
 				foundCountries: null,
+				gameCounter: countries?.map(c => c.properties.name).reduce((partialSum, item) => partialSum + item.length, 0) / 2.3,
 				gameOver: false,
 				inProgress: false,
 				totalCountries: countries.length,
 			})
-		case SET_COUNTRIES:
-			return Object.assign({}, state, {countries: action.payload});
 		case SET_GAME_OVER:
 			return Object.assign({}, state, {
 				gameOver: true,

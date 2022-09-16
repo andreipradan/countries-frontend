@@ -19,8 +19,7 @@ import {getGameTypeId, getTopScore} from "../../utils";
 
 
 const Stats = props => {
-	const defaultCounter = props.countries?.map(c =>
-		c.name).reduce((partialSum, item) => partialSum + item.length, 0) / 2.3
+	const defaultCounter = props.gameCounter
   const [counter, setCounter] = useState(defaultCounter)
 	const [modal, setModal] = useState(false)
   const [started, setStarted] = useState(false)
