@@ -175,7 +175,6 @@ class Widget extends React.Component {
     const mainControls = !!(close || fullscreen || collapse || refresh || settings || settingsInverse);
 
     const {
-      reloading,
       fullscreened,
       randomId,
       height,

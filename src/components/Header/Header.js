@@ -20,7 +20,6 @@ import PowerIcon from "../Icons/HeaderIcons/PowerIcon";
 import BellIcon from "../Icons/HeaderIcons/BellIcon";
 import SettingsIcon from "../Icons/HeaderIcons/SettingsIcon";
 import MessageIcon from "../Icons/HeaderIcons/MessageIcon";
-import BurgerIcon from "../Icons/HeaderIcons/BurgerIcon";
 import ArrowIcon from "../Icons/HeaderIcons/ArrowIcon";
 
 
@@ -35,8 +34,6 @@ import {
 import sender1 from "../../assets/people/a1.jpg";
 import sender2 from "../../assets/people/a5.jpg";
 import sender3 from "../../assets/people/a4.jpg";
-
-import avatar from "../../assets/people/a7.jpg";
 
 import s from "./Header.module.scss";
 import "animate.css";
