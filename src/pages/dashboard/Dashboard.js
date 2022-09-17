@@ -104,7 +104,7 @@ class Dashboard extends React.Component {
                         total={scores[0].score}
                       />
                     )
-                    : `No scores for ${this.props.activeMap}`
+                    : `No scores ${this.props.activeMap ? `for ${this.props.activeMap}`: ""}`
                   : <p className="text-warning small">
                     {
                       this.props.errors
