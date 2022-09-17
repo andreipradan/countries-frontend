@@ -35,14 +35,11 @@ const Stats = props => {
 
   const handleEndGame = () => {
 		const score = props.totalCountries - props.countries.length
-		const oldScore = getTopScore(props.me, props.activeMap)
-		const shouldUpdateScore = oldScore ? score > oldScore : true
     props.dispatch(setGameOver(
 			props.token,
 			score,
-			props.me.id,
+			props.user.id,
 			getGameTypeId(props.activeMap),
-			shouldUpdateScore,
 		))
     setStarted(false)
     setModal(true)
@@ -205,4 +202,5 @@ const Stats = props => {
 export default connect(state => ({
 	...state.map,
 	token: state.auth.token,
+	user: state.auth.user,
 }))(Stats)

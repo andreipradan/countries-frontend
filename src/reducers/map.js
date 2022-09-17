@@ -19,7 +19,6 @@ const initialState = {
 	gameOver: false,
 	inProgress: false,
 	loading: false,
-	me: null,
 	series: null,
 	topScore: 0,
 	totalCountries: 0,
@@ -41,7 +40,6 @@ export default (state = initialState, action) => {
 				loading: false,
 				users: users,
 				topScore: users[0].score,  // TODO: update with new scores per game type
-				me: users.find(u => u.id === action.userId)
 			})
 		case FOUND_COUNTRY:
 			const currentDate = new Date();
@@ -91,10 +89,6 @@ export default (state = initialState, action) => {
 				errors: action.errors,
 			})
 		case USER_SCORE_UPDATE: return Object.assign({}, state, {
-			me: {
-				...state.me,
-				scores: [...state.me.scores, action.score]
-			},
 			users: state.users.map(user =>
 				user.id !== state.me.id
 					? user
