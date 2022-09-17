@@ -1,14 +1,15 @@
 import {
-	FETCH_USERS_FAILURE,
-	FETCH_USERS_START,
-	FETCH_USERS_SUCCESS,
+	FETCH_SCORES_FAILURE,
+	FETCH_SCORES_START,
+	FETCH_SCORES_SUCCESS,
 	FOUND_COUNTRY,
 	NEW_GAME,
-	SET_GAME_OVER, USER_SCORE_FAILURE,
-	SET_STATE, USER_SCORE_UPDATE,
+	SET_GAME_OVER, SCORE_ADD_FAILURE,
+	SET_STATE, SCORE_ADD_SUCCESS,
 } from '../actions/map';
 import worldGeodata from "@amcharts/amcharts5-geodata/worldLow";
 import countries2 from "@amcharts/amcharts5-geodata/data/countries2";
+import {gameTypes} from "../pages/dashboard/utils";
 
 const initialState = {
 	activeMap: null,
@@ -19,27 +20,35 @@ const initialState = {
 	gameOver: false,
 	inProgress: false,
 	loading: false,
+	scores: null,
 	series: null,
-	topScore: 0,
 	totalCountries: 0,
-	users: null,
 };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case FETCH_USERS_FAILURE: return Object.assign({}, state, {
-			errors: action.errors, loading: false, users: null,
+		case FETCH_SCORES_FAILURE: return Object.assign({}, state, {
+			errors: action.errors, loading: false, scores: null,
 		})
-		case FETCH_USERS_START: return Object.assign({}, state, {
-			errors: null, loading: true, users: null,
+		case FETCH_SCORES_START: return Object.assign({}, state, {
+			errors: null, loading: true, scores: null,
 		})
-		case FETCH_USERS_SUCCESS:
-			const users = action.users.sort((a, b) => a.score > b.score ? -1 : 1)
+		case FETCH_SCORES_SUCCESS:
+			const scores = {}
+			for (const gameType in gameTypes) {
+				const gameTypeScores = action.scores.filter(s => s.game_type === parseInt(gameType)).sort((a, b) =>
+          a.score > b.score
+            ? -1 : a.score === b.score
+              ? a.duration < b.duration ? -1 : 1
+              : 1
+        )
+        if (gameTypeScores.length)
+          scores[gameTypes[gameType]] = gameTypeScores
+			}
 			return Object.assign({}, state, {
 				errors: null,
 				loading: false,
-				users: users,
-				topScore: users[0].score,  // TODO: update with new scores per game type
+				scores: scores,
 			})
 		case FOUND_COUNTRY:
 			const currentDate = new Date();
@@ -82,19 +91,27 @@ export default (state = initialState, action) => {
 				gameOver: true,
 				inProgress: false,
 			})
-		case USER_SCORE_FAILURE:
+		case SCORE_ADD_FAILURE:
 			return Object.assign({}, state, {
 				gameOver: true,
 				inProgress: false,
 				errors: action.errors,
 			})
-		case USER_SCORE_UPDATE: return Object.assign({}, state, {
-			users: state.users.map(user =>
-				user.id !== state.me.id
-					? user
-					: {...user, scores: [...user.scores, action.score]}
-			)
-		})
+		case SCORE_ADD_SUCCESS:
+			const gameType = gameTypes[action.gameTypeId]
+			const gameScores = state.scores[gameType]
+			const newScores = gameScores?.length
+				? [...gameScores, action.score].sort((a, b) =>
+					a.score > b.score
+						? -1 : a.score === b.score
+							? a.duration < b.duration ? -1 : 1
+							: 1)
+				: [action.score]
+			return Object.assign({}, state, {
+				scores: !state.scores
+					? {[gameType]: newScores}
+					: {...state.scores, [gameType]: newScores}
+			})
 		case SET_STATE:
 			return Object.assign({}, state, action.payload)
 		default:

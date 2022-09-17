@@ -7,8 +7,12 @@ const ProgressStats = props => {
 
 	return <div className="mt row progress-stats">
 		<div className="col-md-9 col-12">
+			{
+				props.header &&
+				<h6 className="name fw-semi-bold">{props.header}</h6>
+			}
 			<p className="description deemphasize mb-xs text-white">
-				{props.label}
+				{props.label} [{props.duration}s]
 			</p>
 			<Progress
 				color={background}

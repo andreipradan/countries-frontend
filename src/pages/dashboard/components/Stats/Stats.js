@@ -37,9 +37,10 @@ const Stats = props => {
 		const score = props.totalCountries - props.countries.length
     props.dispatch(setGameOver(
 			props.token,
-			score,
 			props.user.id,
 			getGameTypeId(props.activeMap),
+			score,
+			props.gameCounter - counter
 		))
     setStarted(false)
     setModal(true)

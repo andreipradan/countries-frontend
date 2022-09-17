@@ -16,8 +16,8 @@ import peopleA1 from "../../assets/people/a1.jpg";
 import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
-import { fetchUsers } from "../../actions/map";
-import { getDisplayName, getTopScore } from "./utils";
+import { fetchScores } from "../../actions/map";
+import { gameTypes, getDisplayName } from "./utils";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -31,13 +31,13 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     if (!this.props.users) {
-      this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))
+      this.props.dispatch(fetchScores(this.props.token, this.props.user.id))
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.user !== prevProps.user) {
-      this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))
+      this.props.dispatch(fetchScores(this.props.token, this.props.user.id))
     }
   }
 
@@ -69,53 +69,62 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    const scores = this.props.activeMap
+      ? this.props.scores?.[this.props.activeMap]
+      : this.props.scores
+        ? Object.keys(this.props.scores).map(gameType =>
+          this.props.scores[gameType][0]).sort((a, b) =>
+            a.score > b.score ? -1 : 1
+          )
+        : []
     return (
       <div className={s.root}>
         <Row>
-          <Col lg={8}>
-            <Widget className="bg-transparent">
-              <Map />
-            </Widget>
-          </Col>
+          <Col lg={8}><Widget className="bg-transparent"><Map /></Widget></Col>
           <Col lg={1} />
-
           <Col lg={3}>
-            {
-              this.props.activeMap
-              ? <Widget
-                  className="bg-transparent"
-                  loading={this.props.loading}
-                  refresh={() => this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))}
-                  close
-                >
-                  <p className="fw-semi-bold text-white">Top {this.props.activeMap} Scores</p>
-                  {
-                    this.props.users
-                      ? this.props.users?.slice(0, 10).map((user, i) => <ProgressStats
+            <Widget
+              className="bg-transparent"
+              loading={this.props.loading}
+              refresh={() => this.props.dispatch(fetchScores(this.props.token, this.props.user.id))}
+              close
+            >
+              <p className="fw-semi-bold text-white">Top {this.props.activeMap} players</p>
+              {
+                scores
+                  ? scores.length
+                    ? scores.map((score, i) =>
+                      <ProgressStats
                         key={i}
                         dynamicLabel
-                        label={getDisplayName(user)}
-                        value={getTopScore(user, this.props.activeMap) || 0}
-                        total={this.props.topScore}
+                        label={getDisplayName(score.user)}
+                        header={!this.props.activeMap && gameTypes[score.game_type]}
+                        duration={score.duration}
+                        value={score.score}
+                        total={scores[0].score}
                       />
-                      )
-                      : <p className="text-warning small">
-                        Failed to fetch scores [{this.props.errors}]
+                    )
+                    : `No scores for ${this.props.activeMap}`
+                  : <p className="text-warning small">
+                    {
+                      this.props.errors
+                      ? <>Failed to fetch scores [{this.props.errors}]
                         <Button
                           className="text-warning"
                           color="transparent"
                           size="xs"
-                          onClick={() => this.props.dispatch(fetchUsers(this.props.token, this.props.user.id))}
+                          onClick={() => this.props.dispatch(fetchScores(this.props.token, this.props.user.id))}
                         >
                           <span className="auth-btn-circle ">
                             <i className="la la-refresh"/>
                           </span>
                         </Button>
-                    </p>
-                  }
-                </Widget>
-                : "Select a game type"
-            }
+                      </>
+                      : `No scores ${this.props.activeMap ? `for ${this.props.activeMap}`: ""}`
+                    }
+                </p>
+              }
+            </Widget>
           </Col>
         </Row>
 
