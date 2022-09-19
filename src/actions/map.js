@@ -38,13 +38,18 @@ export const fetchScores = (token, userId) => dispatch => {
 }
 
 export const setGameOver = (token, userId, gameType, score, duration) => dispatch => {
-	apiClient.post(
-		`api/scores/`,
-		{user_id: userId, score: score, game_type: getGameTypeId(gameType), duration: duration},
-		{headers: {Authorization: `Token ${token}`}})
-		.then(response => {
-			dispatch({type: SCORE_ADD_SUCCESS, score: response.data, gameType: gameType})
-		})
-		.catch(error => dispatch({type: SCORE_ADD_FAILURE, errors: parseErrors(error)}))
+	if (score) {
+		apiClient.post(`api/scores/`,
+			{
+				user_id: userId,
+				score: score,
+				game_type: getGameTypeId(gameType),
+				duration: duration
+			},
+			{headers: {Authorization: `Token ${token}`}})
+			.then(response => {
+				dispatch({type: SCORE_ADD_SUCCESS, score: response.data, gameType: gameType})})
+			.catch(error => dispatch({type: SCORE_ADD_FAILURE, errors: parseErrors(error)}))
+	}
 	dispatch({type: SET_GAME_OVER})
 }

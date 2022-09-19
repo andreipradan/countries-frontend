@@ -11,7 +11,7 @@ import countries from "@amcharts/amcharts5-geodata/data/countries2";
 
 import { newGame } from "../../../../actions/map";
 import s from './Map.module.scss';
-import Stats from "../Stats";
+import Controls from "./components/Controls";
 
 const Map = props => {
   const [allSeries, setAllSeries] = useState(null)
@@ -168,7 +168,7 @@ const Map = props => {
           </Button>
         </span>
       }
-      <Stats />
+      <Controls />
       <div className={s.map} id="map" />
     </div>
   );

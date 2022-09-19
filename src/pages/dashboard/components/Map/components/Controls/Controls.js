@@ -4,24 +4,35 @@ import {
 	ButtonGroup,
 	Input,
 	InputGroup,
-	InputGroupAddon, InputGroupText
+	InputGroupAddon, InputGroupText, Modal, ModalBody, ModalFooter, ModalHeader
 } from "reactstrap";
 import {connect} from "react-redux";
 
-import ProgressStats from "../ProgressStats";
-import ResultsModal from "../ResultsModal"
-import Widget from "../../../../components/Widget";
-import { foundCountry, newGame, setGameOver, setState } from "../../../../actions/map";
-import s from "../Map/Map.module.scss";
-import SearchIcon from "../../../../components/Icons/HeaderIcons/SearchIcon";
-import {secondsToTime} from "./utils";
+import ProgressStats from "../../../ProgressStats";
+import ResultsModal from "../../../ResultsModal"
+import Widget from "../../../../../../components/Widget";
+import { foundCountry, newGame, setGameOver, setState } from "../../../../../../actions/map";
+import s from "../../../Map/Map.module.scss";
+import SearchIcon from "../../../../../../components/Icons/HeaderIcons/SearchIcon";
 
+const secondsToTime = secs => {
+  let divisor_for_minutes = secs % (60 * 60);
+  let minutes = Math.floor(divisor_for_minutes / 60);
 
-const Stats = props => {
+  let divisor_for_seconds = divisor_for_minutes % 60;
+  let seconds = Math.ceil(divisor_for_seconds);
+
+  if (minutes / 10 < 1) minutes = `0${minutes}`
+  if (seconds / 10 < 1) seconds = `0${seconds}`
+  return {"mins": minutes, "secs": seconds}
+}
+
+const Controls = props => {
 	const defaultCounter = props.gameCounter
   const [counter, setCounter] = useState(defaultCounter)
 	const [modal, setModal] = useState(false)
   const [started, setStarted] = useState(false)
+	const [endGameModalOpen, setEndGameModalOpen] = useState(false)
 
   useEffect(() => setCounter(defaultCounter), [defaultCounter, props.totalCountries])
 
@@ -32,7 +43,10 @@ const Stats = props => {
     }, 1000)
   })
 
+	const toggleEndGameModal = () => setEndGameModalOpen(!endGameModalOpen)
+
   const handleEndGame = () => {
+		setEndGameModalOpen(false)
 		const score = props.totalCountries - props.countries.length
     props.dispatch(setGameOver(
 			props.token,
@@ -112,7 +126,7 @@ const Stats = props => {
 								className="text-white"
 								color="danger"
 								size="xs"
-								onClick={handleEndGame}
+								onClick={toggleEndGameModal}
 							>
 								<span className="auth-btn-circle ">
 									<i className="la la-times"/>
@@ -197,10 +211,18 @@ const Stats = props => {
 				/>
 			</Widget>
 		</span>
+		<Modal isOpen={endGameModalOpen} toggle={toggleEndGameModal}>
+      <ModalHeader toggle={toggleEndGameModal}>Are you sure?</ModalHeader>
+      <ModalBody>Do you really want to end your game?</ModalBody>
+      <ModalFooter>
+        <Button color="default" onClick={toggleEndGameModal} data-dismiss="modal">No</Button>{' '}
+        <Button color="danger" onClick={handleEndGame}>Yes, end game</Button>
+      </ModalFooter>
+    </Modal>
 	</div>
 }
 export default connect(state => ({
 	...state.map,
 	token: state.auth.token,
 	user: state.auth.user,
-}))(Stats)
+}))(Controls)
