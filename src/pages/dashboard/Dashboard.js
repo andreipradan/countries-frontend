@@ -30,13 +30,7 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.users) {
-      this.props.dispatch(fetchScores(this.props.token, this.props.user.id))
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.user !== prevProps.user) {
+    if (!this.props.scores) {
       this.props.dispatch(fetchScores(this.props.token, this.props.user.id))
     }
   }
@@ -91,20 +85,18 @@ class Dashboard extends React.Component {
             >
               <p className="fw-semi-bold text-white">Top {this.props.activeMap} players</p>
               {
-                scores
-                  ? scores.length
-                    ? scores.map((score, i) =>
-                      <ProgressStats
-                        key={i}
-                        dynamicLabel
-                        label={getDisplayName(score.user)}
-                        header={!this.props.activeMap && gameTypes[score.game_type]}
-                        duration={score.duration}
-                        value={score.score}
-                        total={scores[0].score}
-                      />
-                    )
-                    : `No scores ${this.props.activeMap ? `for ${this.props.activeMap}`: ""}`
+                scores?.length
+                  ? scores.map((score, i) =>
+                    <ProgressStats
+                      key={i}
+                      dynamicLabel
+                      label={getDisplayName(score.user)}
+                      header={!this.props.activeMap && gameTypes[score.game_type]}
+                      duration={score.duration}
+                      value={score.score}
+                      total={scores[0].score}
+                    />
+                  )
                   : <p className="text-warning small">
                     {
                       this.props.errors

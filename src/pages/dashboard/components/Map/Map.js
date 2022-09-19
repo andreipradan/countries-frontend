@@ -130,7 +130,7 @@ const Map = props => {
   }, [])
 
   useEffect(() => {
-    if (!props.activeMap) return
+    if (!props.activeMap || !allSeries) return
     const data = am5geodata_worldLow.features.map(c => {
       const config = {
         id: c.properties.id,

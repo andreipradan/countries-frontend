@@ -13,7 +13,7 @@ import {
   DropdownItem,
   Badge,
   ButtonGroup,
-  Button,
+  Button, Modal, ModalHeader, ModalBody, ModalFooter,
 } from "reactstrap";
 import Notifications from "../Notifications";
 import PowerIcon from "../Icons/HeaderIcons/PowerIcon";
@@ -23,7 +23,7 @@ import MessageIcon from "../Icons/HeaderIcons/MessageIcon";
 import ArrowIcon from "../Icons/HeaderIcons/ArrowIcon";
 
 
-import {logout} from "../../actions/user";
+import { logout } from "../../actions/user";
 import {
   openSidebar,
   closeSidebar,
@@ -37,13 +37,17 @@ import sender3 from "../../assets/people/a4.jpg";
 
 import s from "./Header.module.scss";
 import "animate.css";
-import {getDisplayName} from "../../pages/dashboard/utils";
+import { getDisplayName } from "../../pages/dashboard/utils";
+import { newGame, setGameOver } from "../../actions/map";
 
 const Header = props => {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [messagesOpen, setMessagesOpen] = useState(false)
   const [supportOpen, setSupportOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
+
+  const toggleLogoutModal = () => {setLogoutModalOpen(!logoutModalOpen)}
 
   const toggleSidebar = () => {
     props.isSidebarOpened
@@ -255,7 +259,7 @@ const Header = props => {
 
         <NavItem>
           <NavLink
-            onClick={() => props.dispatch(logout())}
+            onClick={toggleLogoutModal}
             className={`${s.navItem} text-white`}
             href="#"
           >
@@ -264,15 +268,48 @@ const Header = props => {
         </NavItem>
       </Nav>
     </div>
+    <Modal isOpen={logoutModalOpen} toggle={toggleLogoutModal}>
+      <ModalHeader toggle={toggleLogoutModal}>Are you sure?</ModalHeader>
+      <ModalBody>
+        Do you really want to {
+        props.map.inProgress && "end your game and "
+      }log out?{
+        props.map.inProgress && <><br />
+        (Your game duration will be set to maximum)</>
+
+      }
+      </ModalBody>
+      <ModalFooter>
+        <Button color="default" onClick={toggleLogoutModal} data-dismiss="modal">No</Button>{' '}
+        <Button color="danger" onClick={() => {
+          if (props.map.inProgress) {
+            props.dispatch(setGameOver(
+              props.token,
+              props.user.id,
+              props.map.activeMap,
+              props.map.totalCountries - props.map.countries.length,
+              props.map.gameCounter,
+            ))
+          }
+          if (props.map.activeMap)
+            props.dispatch(newGame(null))
+          props.dispatch(logout())
+        }}>
+          Yes, {props.map.inProgress && "end game and "}log out
+        </Button>
+      </ModalFooter>
+    </Modal>
   </Navbar>
 }
 
 function mapStateToProps(store) {
   return {
     isSidebarOpened: store.navigation.sidebarOpened,
+    map: store.map,
     sidebarVisibility: store.navigation.sidebarVisibility,
     sidebarPosition: store.navigation.sidebarPosition,
     user: store.auth.user,
+    token: store.auth.token,
   };
 }
 

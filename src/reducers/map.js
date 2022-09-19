@@ -98,8 +98,7 @@ export default (state = initialState, action) => {
 				errors: action.errors,
 			})
 		case SCORE_ADD_SUCCESS:
-			const gameType = gameTypes[action.gameTypeId]
-			const gameScores = state.scores[gameType]
+			const gameScores = state.scores[action.gameType]
 			const newScores = gameScores?.length
 				? [...gameScores, action.score].sort((a, b) =>
 					a.score > b.score
@@ -109,8 +108,8 @@ export default (state = initialState, action) => {
 				: [action.score]
 			return Object.assign({}, state, {
 				scores: !state.scores
-					? {[gameType]: newScores}
-					: {...state.scores, [gameType]: newScores}
+					? {[action.gameType]: newScores}
+					: {...state.scores, [action.gameType]: newScores}
 			})
 		case SET_STATE:
 			return Object.assign({}, state, action.payload)

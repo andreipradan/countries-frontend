@@ -15,7 +15,6 @@ import { foundCountry, newGame, setGameOver, setState } from "../../../../action
 import s from "../Map/Map.module.scss";
 import SearchIcon from "../../../../components/Icons/HeaderIcons/SearchIcon";
 import {secondsToTime} from "./utils";
-import { getGameTypeId } from "../../utils";
 
 
 const Stats = props => {
@@ -38,7 +37,7 @@ const Stats = props => {
     props.dispatch(setGameOver(
 			props.token,
 			props.user.id,
-			getGameTypeId(props.activeMap),
+			props.activeMap,
 			score,
 			props.gameCounter - counter
 		))
