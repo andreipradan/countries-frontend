@@ -4,16 +4,21 @@ import {
 	FETCH_SCORES_SUCCESS,
 	FOUND_COUNTRY,
 	NEW_GAME,
-	SET_GAME_OVER, SCORE_ADD_FAILURE,
+	SET_GAME_OVER, SET_RANDOM_COUNTRY, SCORE_ADD_FAILURE,
 	SET_STATE, SCORE_ADD_SUCCESS,
 } from '../actions/map';
 import worldGeodata from "@amcharts/amcharts5-geodata/worldLow";
 import countries2 from "@amcharts/amcharts5-geodata/data/countries2";
-import {gameTypes} from "../pages/dashboard/utils";
+import {gameTypes, officialCountryCodes} from "../pages/dashboard/utils";
+
+
+const getRandomCountry = countries =>
+	countries[Math.floor(Math.random()*countries.length)]
 
 const initialState = {
 	activeMap: null,
 	countries: null,
+	currentCountry: null,
 	errors: null,
 	foundCountries: null,
 	gameCounter: 0,
@@ -60,26 +65,34 @@ export default (state = initialState, action) => {
                 + currentDate.getSeconds();
 			const countryToRemove = state.countries.find(c => c.name.toLowerCase() === action.payload.toLowerCase())
 			const country = {name: countryToRemove.name, time: datetime}
+			const remainingCountries = state.countries.filter(c =>
+				c.name !== countryToRemove.name
+			)
 			return Object.assign({}, state, {
-				countries: state.countries.filter(c =>
-					c.name !== countryToRemove.name
-				),
+				countries: remainingCountries,
 				foundCountries: state.foundCountries
 					? [...state.foundCountries, country]
-					: [country]
+					: [country],
+				currentCountry: state.currentCountry
+					? getRandomCountry(remainingCountries)
+					: null
 			});
 		case NEW_GAME:
 			const activeMap = action.payload
 			const countries = activeMap !== "World"
-				? worldGeodata.features.filter(c => c.id === "KN"
-						? activeMap === "North America"
-						: countries2[c.id]?.continent === activeMap
+				? worldGeodata.features.filter(c =>
+					officialCountryCodes.includes(c.id)
+						? c.id === "KN"
+							? activeMap === "North America"
+							: countries2[c.id]?.continent === activeMap
+						: false
       		)
-				: worldGeodata.features.filter(c => c.id !== "AQ")
+				: worldGeodata.features.filter(c => officialCountryCodes.includes(c.id))
 			return Object.assign({}, state, {
 				activeMap: activeMap,
 				countries: countries.map(f =>
 					({id: f.properties.id, name: f.properties.name})),
+				currentCountry: null,
 				foundCountries: null,
 				gameCounter: countries?.map(c => c.properties.name).reduce((partialSum, item) => partialSum + item.length, 0) / 2.3,
 				gameOver: false,
@@ -90,6 +103,10 @@ export default (state = initialState, action) => {
 			return Object.assign({}, state, {
 				gameOver: true,
 				inProgress: false,
+			})
+		case SET_RANDOM_COUNTRY:
+			return Object.assign({}, state, {
+				currentCountry: getRandomCountry(state.countries)
 			})
 		case SCORE_ADD_FAILURE:
 			return Object.assign({}, state, {

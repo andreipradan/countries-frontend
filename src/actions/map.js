@@ -10,6 +10,7 @@ export const FETCH_SCORES_SUCCESS = 'FETCH_USERS_SUCCESS'
 export const FOUND_COUNTRY = 'FOUND_COUNTRY';
 export const NEW_GAME = 'NEW_GAME';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
+export const SET_RANDOM_COUNTRY = 'SET_RANDOM_COUNTRY';
 export const SET_STATE = 'SET_STATE';
 
 export const SCORE_ADD_FAILURE = 'SCORE_ADD_FAILURE'

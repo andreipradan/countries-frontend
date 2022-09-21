@@ -70,6 +70,15 @@ class Sidebar extends React.Component {
 						link="/app/dashboard"
 						index="main"
 					/>
+					<LinksGroup
+						onActiveSidebarItemChange={activeItem => this.props.dispatch(changeActiveSidebarItem(activeItem))}
+						activeItem={this.props.activeItem}
+						header="Guess"
+						isHeader
+						iconName="flaticon-map"
+						link="/app/guess"
+						index="guess"
+					/>
 					<h5 className={[s.navTitle, s.groupTitle].join(' ')}>TEMPLATE</h5>
 					<LinksGroup
 						onActiveSidebarItemChange={activeItem => this.props.dispatch(changeActiveSidebarItem(activeItem))}

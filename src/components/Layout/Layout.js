@@ -12,6 +12,7 @@ import MapsGoogle from '../../pages/components/maps/google';
 import CoreTypography from '../../pages/typography';
 import Charts from '../../pages/components/charts/Charts';
 import Dashboard from '../../pages/dashboard';
+import Guess from '../../pages/guess';
 
 import Header from '../Header';
 import Sidebar from '../Sidebar';
@@ -79,6 +80,7 @@ class Layout extends React.Component {
                   <Switch>
                     <Route path="/app" exact render={() => <Redirect to="/app/dashboard" />} />
                     <Route path="/app/dashboard" exact component={Dashboard} />
+                    <Route path="/app/guess" exact component={Guess} />
                     <Route path="/app/components/icons" exact component={UIIcons} />
                     <Route path="/app/notifications" exact component={UINotifications} />
                     <Route path="/app/components/charts" exact component={Charts} />
