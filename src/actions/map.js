@@ -1,7 +1,7 @@
 import apiClient from '../api'
 import { logout } from "./user";
 import { parseErrors } from "./helpers";
-import { getGameTypeId } from "../pages/dashboard/utils";
+import {getGameSubTypeId, getGameTypeId} from "../pages/dashboard/utils";
 
 export const FETCH_SCORES_FAILURE = 'FETCH_USERS_FAILURE'
 export const FETCH_SCORES_START = 'FETCH_USERS_START'
@@ -38,18 +38,19 @@ export const fetchScores = (token, userId) => dispatch => {
     });
 }
 
-export const setGameOver = (token, userId, gameType, score, duration) => dispatch => {
+export const setGameOver = (token, userId, gameType, gameSubType, score, duration) => dispatch => {
 	if (score) {
 		apiClient.post(`api/scores/`,
 			{
 				user_id: userId,
 				score: score,
 				game_type: getGameTypeId(gameType),
+				game_sub_type: getGameSubTypeId(gameSubType),
 				duration: duration
 			},
 			{headers: {Authorization: `Token ${token}`}})
 			.then(response => {
-				dispatch({type: SCORE_ADD_SUCCESS, score: response.data, gameType: gameType})})
+				dispatch({type: SCORE_ADD_SUCCESS, score: response.data, gameType: gameType, gameSubType: gameSubType})})
 			.catch(error => dispatch({type: SCORE_ADD_FAILURE, errors: parseErrors(error)}))
 	}
 	dispatch({type: SET_GAME_OVER})

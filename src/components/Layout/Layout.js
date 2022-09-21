@@ -80,7 +80,7 @@ class Layout extends React.Component {
                   <Switch>
                     <Route path="/app" exact render={() => <Redirect to="/app/dashboard" />} />
                     <Route path="/app/dashboard" exact component={Dashboard} />
-                    <Route path="/app/guess" exact component={Guess} />
+                    <Route path="/app/random-map" exact component={Guess} />
                     <Route path="/app/components/icons" exact component={UIIcons} />
                     <Route path="/app/notifications" exact component={UINotifications} />
                     <Route path="/app/components/charts" exact component={Charts} />

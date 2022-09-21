@@ -9,7 +9,11 @@ import {
 } from '../actions/map';
 import worldGeodata from "@amcharts/amcharts5-geodata/worldLow";
 import countries2 from "@amcharts/amcharts5-geodata/data/countries2";
-import {gameTypes, officialCountryCodes} from "../pages/dashboard/utils";
+import {
+	gameSubTypes,
+	gameTypes,
+	officialCountryCodes
+} from "../pages/dashboard/utils";
 
 
 const getRandomCountry = countries =>
@@ -41,14 +45,24 @@ export default (state = initialState, action) => {
 		case FETCH_SCORES_SUCCESS:
 			const scores = {}
 			for (const gameType in gameTypes) {
-				const gameTypeScores = action.scores.filter(s => s.game_type === parseInt(gameType)).sort((a, b) =>
-          a.score > b.score
-            ? -1 : a.score === b.score
-              ? a.duration < b.duration ? -1 : 1
-              : 1
-        )
-        if (gameTypeScores.length)
-          scores[gameTypes[gameType]] = gameTypeScores
+				for (const gameSubType in gameSubTypes) {
+					const gameTypeScores = action.scores.filter(s =>
+						s.game_type === parseInt(gameType) &&
+						s.game_sub_type === parseInt(gameSubType)
+					).sort((a, b) =>
+						a.score > b.score
+							? -1 : a.score === b.score
+								? a.duration < b.duration ? -1 : 1
+								: 1
+					)
+					if (gameTypeScores.length) {
+						console.log(`added ${gameType} - ${gameSubType}`)
+						if (!scores[gameTypes[gameType]])
+							scores[gameTypes[gameType]] = {[gameSubTypes[gameSubType]]: gameTypeScores}
+						else
+							scores[gameTypes[gameType]][gameSubTypes[gameSubType]] = gameTypeScores
+					}
+				}
 			}
 			return Object.assign({}, state, {
 				errors: null,
@@ -115,7 +129,7 @@ export default (state = initialState, action) => {
 				errors: action.errors,
 			})
 		case SCORE_ADD_SUCCESS:
-			const gameScores = state.scores[action.gameType]
+			const gameScores = state.scores[action.gameType]?.[action.gameSubType]
 			const newScores = gameScores?.length
 				? [...gameScores, action.score].sort((a, b) =>
 					a.score > b.score
@@ -125,8 +139,24 @@ export default (state = initialState, action) => {
 				: [action.score]
 			return Object.assign({}, state, {
 				scores: !state.scores
-					? {[action.gameType]: newScores}
-					: {...state.scores, [action.gameType]: newScores}
+					? {[action.gameType]: {[action.gameSubType]: newScores}}
+					: !state.scores[action.gameType]
+						? {...state.scores, [action.gameType]: {[action.gameSubType]: newScores}}
+						: !state.scores[action.gameType][action.gameSubType]
+							? {...state.scores,
+								[action.gameType]: {
+									...state.scores[action.gameType],
+									[action.gameSubType]: newScores
+								}}
+							: {
+								...state.scores,
+								[action.gameType]: {
+									...state.scores[action.gameType],
+									[action.gameSubType]: {
+										...state.scores[action.gameType][action.gameSubType],
+										newScores
+									}
+								}}
 			})
 		case SET_STATE:
 			return Object.assign({}, state, action.payload)

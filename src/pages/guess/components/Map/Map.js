@@ -23,7 +23,7 @@ const Map = props => {
   const [resetButton, setResetButton] = useState(null)
 
   useEffect(() => {
-    if (!props.currentCountry) return console.log("no current country")
+    if (!props.currentCountry || !series) return
     resetButton && resetButton.events.on("click", () => {
       series.zoomToDataItem(
         series.dataItems.find(d => d.dataContext.id === props.currentCountry.id)
@@ -32,10 +32,10 @@ const Map = props => {
     series && series.zoomToDataItem(
       series.dataItems.find(di => di.dataContext.id === props.currentCountry.id)
     )
-  }, [props.currentCountry, series])
+  }, [resetButton, props.currentCountry, series])
 
   useEffect(() => {
-    if (!props.currentCountry) return
+    if (!props.currentCountry || !series) return
     const data = worldMap.features.map(c => ({
       id: c.properties.id,
       name: c.properties.name,

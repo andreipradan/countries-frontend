@@ -17,7 +17,7 @@ import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
 import { fetchScores } from "../../actions/map";
-import { gameTypes, getDisplayName } from "./utils";
+import {gameSubTypes, getDisplayName} from "./utils";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -63,14 +63,16 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const scores = this.props.activeMap
-      ? this.props.scores?.[this.props.activeMap]
-      : this.props.scores
-        ? Object.keys(this.props.scores).map(gameType =>
-          this.props.scores[gameType][0]).sort((a, b) =>
+    const freeGuessingScores = this.props.scores?.["Free Guessing"]
+    const scores = freeGuessingScores
+      ? this.props.activeMap
+        ? freeGuessingScores[this.props.activeMap]
+        : Object.keys(freeGuessingScores).map(gameSubType =>
+          freeGuessingScores[gameSubType][0]).sort((a, b) =>
             a.score > b.score ? -1 : 1
           )
-        : []
+      : []
+
     return (
       <div className={s.root}>
         <Row>
@@ -91,7 +93,7 @@ class Dashboard extends React.Component {
                       key={i}
                       dynamicLabel
                       label={getDisplayName(score.user)}
-                      header={!this.props.activeMap && gameTypes[score.game_type]}
+                      header={!this.props.activeMap && gameSubTypes[score.game_sub_type]}
                       duration={score.duration}
                       value={score.score}
                       total={scores[0].score}

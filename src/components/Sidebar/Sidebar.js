@@ -70,16 +70,26 @@ class Sidebar extends React.Component {
 						link="/app/dashboard"
 						index="main"
 					/>
+					<h5 className={[s.navTitle, s.groupTitle].join(' ')}>Games</h5>
 					<LinksGroup
 						onActiveSidebarItemChange={activeItem => this.props.dispatch(changeActiveSidebarItem(activeItem))}
 						activeItem={this.props.activeItem}
-						header="Guess"
+						header="Random Map"
 						isHeader
 						iconName="flaticon-map"
-						link="/app/guess"
-						index="guess"
+						link="/app/random-map"
+						index="random-map"
 					/>
-					<h5 className={[s.navTitle, s.groupTitle].join(' ')}>TEMPLATE</h5>
+					<LinksGroup
+						onActiveSidebarItemChange={activeItem => this.props.dispatch(changeActiveSidebarItem(activeItem))}
+						activeItem={this.props.activeItem}
+						header="Free Guessing"
+						isHeader
+						iconName="flaticon-map"
+						link="/app/free-guessing"
+						index="free-guessing"
+					/>
+					<h5 className={[s.navTitle, s.groupTitle].join(' ')}>Under construction</h5>
 					<LinksGroup
 						onActiveSidebarItemChange={activeItem => this.props.dispatch(changeActiveSidebarItem(activeItem))}
 						activeItem={this.props.activeItem}

@@ -51,6 +51,7 @@ const Controls = props => {
     props.dispatch(setGameOver(
 			props.token,
 			props.user.id,
+			"Free Guessing",
 			props.activeMap,
 			score,
 			props.gameCounter - counter
