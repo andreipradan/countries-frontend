@@ -31,6 +31,7 @@ const initialState = {
 	loading: false,
 	scores: null,
 	series: null,
+	skippedCountries: null,
 	totalCountries: 0,
 	zoomIn: false,
 	zoomOut: false,
@@ -94,7 +95,7 @@ export default (state = initialState, action) => {
 			});
 		case NEW_GAME:
 			const activeMap = action.payload
-			const countries = activeMap !== "World"
+			let countries = activeMap !== "World"
 				? worldGeodata.features.filter(c =>
 					officialCountryCodes.includes(c.id)
 						? c.id === "KN"
@@ -122,6 +123,11 @@ export default (state = initialState, action) => {
 			})
 		case SET_RANDOM_COUNTRY:
 			return Object.assign({}, state, {
+				skippedCountries: state.currentCountry
+					? !state.skippedCountries?.length
+						? [state.currentCountry]
+						: [...state.skippedCountries, state.currentCountry]
+					: null,
 				currentCountry: getRandomCountry(state.countries)
 			})
 		case SCORE_ADD_FAILURE:

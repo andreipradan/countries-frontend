@@ -44,18 +44,33 @@ const ResultsModal = props => {
             onClick={() => setActiveTab("foundCountries")}
             active={activeTab === "foundCountries"}
           >
-            Found countries
+            Found
             <Badge className="d-sm-down-none ml" style={{borderRadius: "50%"}} color="success">
               {props.foundCountries?.length || 0}
             </Badge>
           </Button>
+          {
+            props.skippedCountries?.length && <Button
+              outline
+              color="default"
+              size="sm"
+              className={notificationsClasses.notificationButton}
+              onClick={() => setActiveTab("skippedCountries")}
+              active={activeTab === "skippedCountries"}
+            >
+              Skipped
+              <Badge className="d-sm-down-none ml" style={{borderRadius: "50%"}} color="warning">
+                {props.skippedCountries?.length || 0}
+              </Badge>
+            </Button>
+          }
           <Button
             outline color="default" size="sm"
             className={notificationsClasses.notificationButton}
             onClick={() => setActiveTab("countries")}
             active={activeTab === "countries"}
           >
-            Remaining countries
+            Remaining
             <Badge className={`d-sm-down-none ml`} style={{borderRadius: "50%"}} color="info">
               {props.countries?.length || 0}
             </Badge>
@@ -72,10 +87,16 @@ const ResultsModal = props => {
                     className={
                     `fa fa-${
                       activeTab === "foundCountries"
-                        ? "check" : "map-marker"
+                        ? "check"
+                        : activeTab === "skippedCountries"
+                          ? "step-forward"
+                          : "map-marker"
                     } text-${
                       activeTab === "foundCountries"
-                        ? "success" : "info"
+                        ? "success"
+                        : activeTab === "skippedCountries"
+                          ? "warning"
+                          : "info"
                     } fa-lg`}/>
                 </span>
                 <p className="m-0 overflow-hidden">

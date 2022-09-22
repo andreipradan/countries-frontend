@@ -19,6 +19,7 @@ import {
 } from "../../../../../../actions/map";
 import s from "../../../../../dashboard/components/Map/Map.module.scss";
 import SearchIcon from "../../../../../../components/Icons/HeaderIcons/SearchIcon";
+import {toast} from "react-toastify";
 
 const secondsToTime = secs => {
   let divisor_for_minutes = secs % (60 * 60);
@@ -118,8 +119,12 @@ const Controls = props => {
 						placeholder="Country"
 						ref={ref}
 						onKeyUp={event => {
-							if (event.key === "Escape" || event.target.value === "skip") {
+							if (
+								event.key === "Escape" ||
+								event.target.value.toLowerCase().trim() === "skip"
+							) {
 								event.target.value = ""
+								toast.warning(props.currentCountry.name)
 								return props.dispatch({type: SET_RANDOM_COUNTRY})
 							}
 							switch (event.target.value) {
