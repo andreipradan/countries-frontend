@@ -33,7 +33,7 @@ const secondsToTime = secs => {
 }
 
 const Controls = props => {
-	const defaultCounter = props.gameCounter
+	const defaultCounter = props.gameCounter * 1.5
   const [counter, setCounter] = useState(defaultCounter)
 	const [modal, setModal] = useState(false)
   const [started, setStarted] = useState(false)
@@ -116,8 +116,24 @@ const Controls = props => {
 						className="input-transparent"
 						placeholder="Country"
 						ref={ref}
-						onBlur={ref.current?.focus()}
-						onKeyUp={event => event.key === "Escape" && props.dispatch({type: SET_RANDOM_COUNTRY})}
+						onKeyUp={event => {
+							if (event.key === "Escape") {
+								event.target.value = ""
+								return props.dispatch({type: SET_RANDOM_COUNTRY})
+							}
+							switch (event.target.value) {
+								case "=": {
+									event.target.value = ""
+									return props.dispatch(setState({zoomIn: true}))
+								}
+								case "-": {
+									event.target.value = ""
+									return props.dispatch(setState({zoomOut: true}))
+								}
+								default: break
+							}
+						}
+					}
 						onInput={e => {
 							e.preventDefault()
 							const text = e.target.value.toLowerCase().trim()

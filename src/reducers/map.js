@@ -32,6 +32,8 @@ const initialState = {
 	scores: null,
 	series: null,
 	totalCountries: 0,
+	zoomIn: false,
+	zoomOut: false,
 };
 
 export default (state = initialState, action) => {
@@ -108,7 +110,8 @@ export default (state = initialState, action) => {
 					({id: f.properties.id, name: f.properties.name})),
 				currentCountry: null,
 				foundCountries: null,
-				gameCounter: countries?.map(c => c.properties.name).reduce((partialSum, item) => partialSum + item.length, 0) / 2.3,
+				gameCounter: countries?.map(c => c.properties.name).reduce((partialSum, item) =>
+					partialSum + item.length, 0) / 2.3,
 				gameOver: false,
 				inProgress: false,
 				totalCountries: countries.length,

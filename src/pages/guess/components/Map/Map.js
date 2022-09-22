@@ -8,6 +8,7 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
 import s from '../../../dashboard/components/Map/Map.module.scss';
 import Controls from "./components/Controls";
+import {setState} from "../../../../actions/map";
 
 const defaultButtonProps = {
   paddingTop: 10,
@@ -23,15 +24,29 @@ const Map = props => {
   const [resetButton, setResetButton] = useState(null)
 
   useEffect(() => {
+    if (props.zoomIn) {
+      series.chart.zoomIn()
+      props.dispatch(setState({zoomIn: false}))
+    }
+  },[props.zoomIn])
+
+  useEffect(() => {
+    if (props.zoomOut) {
+      series.chart.zoomOut()
+      props.dispatch(setState({zoomOut: false}))
+    }
+  },[props.zoomOut])
+
+  useEffect(() => {
     if (!props.currentCountry || !series) return
     resetButton && resetButton.events.on("click", () => {
       series.zoomToDataItem(
         series.dataItems.find(d => d.dataContext.id === props.currentCountry.id)
       )
     })
-    series && series.zoomToDataItem(
+    series.zoomToDataItem(
       series.dataItems.find(di => di.dataContext.id === props.currentCountry.id)
-    )
+    ).waitForStop().then(() => series.chart.zoomOut())
   }, [resetButton, props.currentCountry, series])
 
   useEffect(() => {

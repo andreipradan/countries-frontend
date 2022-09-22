@@ -11,6 +11,7 @@ import ProgressStats from "../dashboard/components/ProgressStats";
 import s from "../dashboard/Dashboard.module.scss";
 
 import { fetchScores } from "../../actions/map";
+import { gameSubTypes, getDisplayName } from "../dashboard/utils";
 
 const Guess = props => {
   useEffect(() => {
@@ -19,14 +20,15 @@ const Guess = props => {
     }
   }, [])
 
-  const scores = props.activeMap
-    ? props.scores?.[props.activeMap]
-    : props.scores
-      ? Object.keys(props.scores).map(gameType =>
-        props.scores[gameType][0]).sort((a, b) =>
+  const randomMapScores = props.scores?.["Random Map"]
+  const scores = randomMapScores
+    ? props.activeMap
+      ? randomMapScores[props.activeMap]
+      : Object.keys(randomMapScores).map(gameSubType =>
+        randomMapScores[gameSubType][0]).sort((a, b) =>
           a.score > b.score ? -1 : 1
         )
-      : []
+    : []
 
   return (
     <div className={s.root}>
@@ -47,8 +49,8 @@ const Guess = props => {
                   <ProgressStats
                     key={i}
                     dynamicLabel
-                    label={score.user.email}
-                    header={!props.activeMap && score.game_type}
+                    label={getDisplayName(score.user)}
+                    header={!props.activeMap && gameSubTypes[score.game_sub_type]}
                     duration={score.duration}
                     value={score.score}
                     total={scores[0].score}
