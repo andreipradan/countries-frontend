@@ -1,7 +1,10 @@
+import React from 'react'
+import { toast } from "react-toastify";
+
 import apiClient from '../api'
 import { logout } from "./user";
 import { parseErrors } from "./helpers";
-import {getGameSubTypeId, getGameTypeId} from "../pages/dashboard/utils";
+import { getGameSubTypeId, getGameTypeId } from "../pages/dashboard/utils";
 
 export const FETCH_SCORES_FAILURE = 'FETCH_USERS_FAILURE'
 export const FETCH_SCORES_START = 'FETCH_USERS_START'
@@ -51,7 +54,15 @@ export const setGameOver = (token, userId, gameType, gameSubType, score, duratio
 			{headers: {Authorization: `Token ${token}`}})
 			.then(response => {
 				dispatch({type: SCORE_ADD_SUCCESS, score: response.data, gameType: gameType, gameSubType: gameSubType})})
-			.catch(error => dispatch({type: SCORE_ADD_FAILURE, errors: parseErrors(error)}))
+			.catch(error => {
+				const errors = parseErrors(error)
+				dispatch({type: SCORE_ADD_FAILURE, errors: errors})
+				toast.error(
+					<span>Error{errors.length > 1 ? 's' : ''} while saving score: <br />
+						<ul>{errors.map((error, i) => <li key={i}>{error}</li>)}</ul>
+					</span>,
+					{ hideProgressBar: true, position: "top-right" })
+			})
 	}
 	dispatch({type: SET_GAME_OVER})
 }

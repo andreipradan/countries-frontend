@@ -60,9 +60,10 @@ const Controls = props => {
     props.dispatch(setGameOver(
 			props.token,
 			props.user.id,
+			"Random Map",
 			props.activeMap,
 			score,
-			props.gameCounter - counter
+			defaultCounter - counter
 		))
     setStarted(false)
     setModal(true)

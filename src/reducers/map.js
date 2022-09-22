@@ -58,7 +58,6 @@ export default (state = initialState, action) => {
 								: 1
 					)
 					if (gameTypeScores.length) {
-						console.log(`added ${gameType} - ${gameSubType}`)
 						if (!scores[gameTypes[gameType]])
 							scores[gameTypes[gameType]] = {[gameSubTypes[gameSubType]]: gameTypeScores}
 						else
@@ -155,10 +154,7 @@ export default (state = initialState, action) => {
 								...state.scores,
 								[action.gameType]: {
 									...state.scores[action.gameType],
-									[action.gameSubType]: {
-										...state.scores[action.gameType][action.gameSubType],
-										newScores
-									}
+									[action.gameSubType]: newScores
 								}}
 			})
 		case SET_STATE:
