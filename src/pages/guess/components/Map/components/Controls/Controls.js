@@ -117,7 +117,7 @@ const Controls = props => {
 						placeholder="Country"
 						ref={ref}
 						onKeyUp={event => {
-							if (event.key === "Escape") {
+							if (event.key === "Escape" || event.target.value === "skip") {
 								event.target.value = ""
 								return props.dispatch({type: SET_RANDOM_COUNTRY})
 							}
