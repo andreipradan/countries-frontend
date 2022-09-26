@@ -8,8 +8,8 @@ import {
 } from "reactstrap";
 import {connect} from "react-redux";
 
-import ProgressStats from "../../../../../dashboard/components/ProgressStats"
-import ResultsModal from "../../../../../dashboard/components/ResultsModal/ResultsModal"
+import ProgressStats from "../../../ProgressStats"
+import ResultsModal from "../../components/ResultsModal/ResultsModal"
 import {
 	foundCountry,
 	newGame,
@@ -17,7 +17,7 @@ import {
 	setGameOver,
 	setState
 } from "../../../../../../actions/map";
-import s from "../../../../../dashboard/components/Map/Map.module.scss";
+import s from "../../Map.module.scss";
 import SearchIcon from "../../../../../../components/Icons/HeaderIcons/SearchIcon";
 import {toast} from "react-toastify";
 

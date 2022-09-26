@@ -6,14 +6,14 @@ import { connect } from "react-redux";
 import Widget from "../../components/Widget";
 
 import Map from "./components/Map/Map";
-import ProgressStats from "../dashboard/components/ProgressStats";
+import ProgressStats from "./components/ProgressStats";
 
 import s from "../dashboard/Dashboard.module.scss";
 
 import { fetchScores } from "../../actions/map";
 import { gameSubTypes, getDisplayName } from "../dashboard/utils";
 
-const Guess = props => {
+const RandomMap = props => {
   useEffect(() => {
     if (!props.scores) {
       props.dispatch(fetchScores(props.token, props.user.id))
@@ -82,4 +82,4 @@ const Guess = props => {
     </div>
   );
 }
-export default connect(state => ({...state.map, token: state.auth.token, user: state.auth.user}))(Guess);
+export default connect(state => ({...state.map, token: state.auth.token, user: state.auth.user}))(RandomMap);

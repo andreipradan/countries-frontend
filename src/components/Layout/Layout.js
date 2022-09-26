@@ -12,7 +12,8 @@ import MapsGoogle from '../../pages/components/maps/google';
 import CoreTypography from '../../pages/typography';
 import Charts from '../../pages/components/charts/Charts';
 import Dashboard from '../../pages/dashboard';
-import Guess from '../../pages/guess';
+import RandomMap from '../../pages/randomMap/RandomMap';
+import FreeGuessing from '../../pages/freeGuessing';
 
 import Header from '../Header';
 import Sidebar from '../Sidebar';
@@ -78,9 +79,10 @@ class Layout extends React.Component {
                   timeout={200}
                 >
                   <Switch>
-                    <Route path="/app" exact render={() => <Redirect to="/app/dashboard" />} />
+                    <Route path="/app" exact render={() => <Redirect to="/app/random-map" />} />
                     <Route path="/app/dashboard" exact component={Dashboard} />
-                    <Route path="/app/random-map" exact component={Guess} />
+                    <Route path="/app/random-map" exact component={RandomMap} />
+                    <Route path="/app/free-guessing" exact component={FreeGuessing} />
                     <Route path="/app/components/icons" exact component={UIIcons} />
                     <Route path="/app/notifications" exact component={UINotifications} />
                     <Route path="/app/components/charts" exact component={Charts} />

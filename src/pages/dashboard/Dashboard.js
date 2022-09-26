@@ -1,13 +1,11 @@
 import React from "react";
-import {Row, Col, Progress, Table, Label, Input, Button} from "reactstrap";
+import { Row, Col, Progress, Table, Label, Input } from "reactstrap";
 import { connect } from "react-redux";
 
 
 import Widget from "../../components/Widget";
 
 import Calendar from "./components/calendar/Calendar";
-import Map from "./components/Map/Map";
-import ProgressStats from "./components/ProgressStats";
 import Rickshaw from "./components/rickshaw/Rickshaw";
 
 import s from "./Dashboard.module.scss";
@@ -16,8 +14,9 @@ import peopleA1 from "../../assets/people/a1.jpg";
 import peopleA2 from "../../assets/people/a2.jpg";
 import peopleA5 from "../../assets/people/a5.jpg";
 import peopleA4 from "../../assets/people/a4.jpg";
-import { fetchScores } from "../../actions/map";
-import {gameSubTypes, getDisplayName} from "./utils";
+import {chartData} from "../components/charts/mock";
+import ReactEchartsCore from "echarts-for-react/lib/core";
+import echarts from "echarts/lib/echarts";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -27,12 +26,6 @@ class Dashboard extends React.Component {
       checkedArr: [false, false, false],
     };
     this.checkTable = this.checkTable.bind(this);
-  }
-
-  componentDidMount() {
-    if (!this.props.scores) {
-      this.props.dispatch(fetchScores(this.props.token, this.props.user.id))
-    }
   }
 
   checkTable(id) {
@@ -63,61 +56,25 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const freeGuessingScores = this.props.scores?.["Free Guessing"]
-    const scores = freeGuessingScores
-      ? this.props.activeMap
-        ? freeGuessingScores[this.props.activeMap]
-        : Object.keys(freeGuessingScores).map(gameSubType =>
-          freeGuessingScores[gameSubType][0]).sort((a, b) =>
-            a.score > b.score ? -1 : 1
-          )
-      : []
-
     return (
       <div className={s.root}>
         <Row>
-          <Col lg={8}><Widget className="bg-transparent"><Map /></Widget></Col>
-          <Col lg={1} />
-          <Col lg={3}>
+          <Col lg={12} xs={12}>
             <Widget
-              className="bg-transparent"
-              loading={this.props.loading}
-              refresh={() => this.props.dispatch(fetchScores(this.props.token, this.props.user.id))}
-              close
-            >
-              <p className="fw-semi-bold text-white">Top {this.props.activeMap} players</p>
-              {
-                scores?.length
-                  ? scores.map((score, i) =>
-                    <ProgressStats
-                      key={i}
-                      dynamicLabel
-                      label={getDisplayName(score.user)}
-                      header={!this.props.activeMap && gameSubTypes[score.game_sub_type]}
-                      duration={score.duration}
-                      value={score.score}
-                      total={scores[0].score}
-                    />
-                  )
-                  : <p className="text-warning small">
-                    {
-                      this.props.errors
-                      ? <>Failed to fetch scores [{this.props.errors}]
-                        <Button
-                          className="text-warning"
-                          color="transparent"
-                          size="xs"
-                          onClick={() => this.props.dispatch(fetchScores(this.props.token, this.props.user.id))}
-                        >
-                          <span className="auth-btn-circle ">
-                            <i className="la la-refresh"/>
-                          </span>
-                        </Button>
-                      </>
-                      : `No scores ${this.props.activeMap ? `for ${this.props.activeMap}`: ""}`
-                    }
-                </p>
+              title={
+                <h5>
+                  Echarts <span className="fw-semi-bold">River Chart</span>
+                </h5>
               }
+              close
+              collapse
+            >
+              <ReactEchartsCore
+                echarts={echarts}
+                option={chartData.echarts.river}
+                opts={{renderer: "canvas"}}
+                style={{ height: "350px" }}
+              />
             </Widget>
           </Col>
         </Row>
@@ -425,4 +382,4 @@ class Dashboard extends React.Component {
     );
   }
 }
-export default connect(state => ({...state.map, token: state.auth.token, user: state.auth.user}))(Dashboard);
+export default Dashboard

@@ -6,7 +6,7 @@ import * as am5map from "@amcharts/amcharts5/map";
 import worldMap from "@amcharts/amcharts5-geodata/worldHigh";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-import s from '../../../dashboard/components/Map/Map.module.scss';
+import s from './Map.module.scss';
 import Controls from "./components/Controls";
 import {setState} from "../../../../actions/map";
 
