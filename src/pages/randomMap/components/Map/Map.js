@@ -63,7 +63,7 @@ const Map = props => {
     series.data.setAll(data)
   }, [series, props.currentCountry, props.foundCountries])
 
-  useEffect(()=>{
+  useEffect(() => {
     resetButton && (
       !props.currentCountry || !props.inProgress
         ? resetButton.hide()

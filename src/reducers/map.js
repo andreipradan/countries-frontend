@@ -32,6 +32,7 @@ const initialState = {
 	scores: null,
 	series: null,
 	skippedCountries: null,
+	started: false,
 	totalCountries: 0,
 	zoomIn: false,
 	zoomOut: false,

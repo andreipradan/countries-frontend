@@ -37,7 +37,6 @@ const Controls = props => {
 	const defaultCounter = props.gameCounter * 1.5
   const [counter, setCounter] = useState(defaultCounter)
 	const [modal, setModal] = useState(false)
-  const [started, setStarted] = useState(false)
 	const [endGameModalOpen, setEndGameModalOpen] = useState(false)
 	const ref = useRef(null)
 
@@ -66,14 +65,14 @@ const Controls = props => {
 			score,
 			defaultCounter - counter
 		))
-    setStarted(false)
+		props.started && props.dispatch(setState({started: false}))
     setModal(true)
   }
 
   const handleNewGame = () => {
     props.dispatch(newGame("World"))
     setCounter(defaultCounter)
-    setStarted(false)
+		props.started && props.dispatch(setState({started: false}))
   }
 
   const startStopGame = () => {
@@ -84,7 +83,7 @@ const Controls = props => {
 				return handleNewGame()
 			case "Start": {
 				props.dispatch({type: SET_RANDOM_COUNTRY})
-				return setStarted(true)
+				return !props.started && props.dispatch(setState({started: true}))
 			}
 			default:
 				return console.log(`Unhandled ${startStopButton}`)
@@ -95,7 +94,7 @@ const Controls = props => {
 
 	const startStopButton = props.inProgress
 		? "Pause"
-		: started
+		: props.started
 			? "Resume"
 			: props.gameOver
 				? "New game"
@@ -183,7 +182,7 @@ const Controls = props => {
 					</Button>
 				}
 				{
-					!props.inProgress && started && <>
+					!props.inProgress && props.started && <>
 						<Button
 							className="text-white"
 							color="warning"

@@ -30,7 +30,7 @@ const ResultsModal = props => {
         className={[notificationsClasses.cardHeader, 'card-header'].join(' ')}>
         <div className="text-center mb-sm text-white">
           <strong >
-            You found {!props.countries?.length && "all"}
+            You found {!props.countries?.length && !props.skippedCountries?.length && "all"}
             <span className={`text-${color}`}> {props.foundCountries?.length || 0} </span>
             countries!
           </strong>
