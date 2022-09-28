@@ -1,7 +1,10 @@
 import {Progress} from "reactstrap";
 import React from "react";
+import { secondsToTime } from "../../freeGuessing/utils"
 
 const ProgressStats = props => {
+	const {mins, secs} = secondsToTime(props.duration)
+	const duration = props.duration ? `${mins}m ${secs}s` : "s"
 	const percentage = props.value / props.total * 100
 	const background = percentage < 40 ? "danger" : percentage < 50 ? "warning" : "info"
 
@@ -12,7 +15,7 @@ const ProgressStats = props => {
 				<h6 className="name fw-semi-bold">{props.header}</h6>
 			}
 			<p className="description deemphasize mb-xs text-white">
-				{props.label} [{props.duration}s]
+				{props.label} <time className="help-block m-0 float-right">{duration}</time>
 			</p>
 			<Progress
 				color={background}

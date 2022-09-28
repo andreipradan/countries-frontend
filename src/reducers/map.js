@@ -13,7 +13,7 @@ import {
 	gameSubTypes,
 	gameTypes,
 	officialCountryCodes
-} from "../pages/dashboard/utils";
+} from "../pages/freeGuessing/utils";
 
 
 const getRandomCountry = countries =>

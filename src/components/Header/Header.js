@@ -37,7 +37,7 @@ import sender3 from "../../assets/people/a4.jpg";
 
 import s from "./Header.module.scss";
 import "animate.css";
-import { getDisplayName } from "../../pages/dashboard/utils";
+import { getDisplayName } from "../../pages/freeGuessing/utils";
 import { newGame, setGameOver } from "../../actions/map";
 
 const Header = props => {

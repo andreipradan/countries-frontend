@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 import apiClient from '../api'
 import { parseErrors } from "./helpers";
-import {getDisplayName} from "../pages/dashboard/utils";
+import {getDisplayName} from "../pages/freeGuessing/utils";
 
 
 export const LOGIN_START = 'LOGIN_START'

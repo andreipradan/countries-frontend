@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import apiClient from '../api'
 import { logout } from "./user";
 import { parseErrors } from "./helpers";
-import { getGameSubTypeId, getGameTypeId } from "../pages/dashboard/utils";
+import { getGameSubTypeId, getGameTypeId } from "../pages/freeGuessing/utils";
 
 export const FETCH_SCORES_FAILURE = 'FETCH_USERS_FAILURE'
 export const FETCH_SCORES_START = 'FETCH_USERS_START'

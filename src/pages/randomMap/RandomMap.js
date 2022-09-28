@@ -11,7 +11,7 @@ import ProgressStats from "./components/ProgressStats";
 import s from "../dashboard/Dashboard.module.scss";
 
 import { fetchScores } from "../../actions/map";
-import { gameSubTypes, getDisplayName } from "../dashboard/utils";
+import { gameSubTypes, getDisplayName } from "../freeGuessing/utils";
 
 const RandomMap = props => {
   useEffect(() => {

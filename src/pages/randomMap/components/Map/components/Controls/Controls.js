@@ -7,6 +7,7 @@ import {
 	InputGroupAddon, InputGroupText, Modal, ModalBody, ModalFooter, ModalHeader
 } from "reactstrap";
 import {connect} from "react-redux";
+import {toast} from "react-toastify";
 
 import ProgressStats from "../../../ProgressStats"
 import ResultsModal from "../../components/ResultsModal/ResultsModal"
@@ -19,19 +20,7 @@ import {
 } from "../../../../../../actions/map";
 import s from "../../Map.module.scss";
 import SearchIcon from "../../../../../../components/Icons/HeaderIcons/SearchIcon";
-import {toast} from "react-toastify";
-
-const secondsToTime = secs => {
-  let divisor_for_minutes = secs % (60 * 60);
-  let minutes = Math.floor(divisor_for_minutes / 60);
-
-  let divisor_for_seconds = divisor_for_minutes % 60;
-  let seconds = Math.ceil(divisor_for_seconds);
-
-  if (minutes / 10 < 1) minutes = `0${minutes}`
-  if (seconds / 10 < 1) seconds = `0${seconds}`
-  return {"mins": minutes, "secs": seconds}
-}
+import { secondsToTime } from "../../../../../freeGuessing/utils"
 
 const Controls = props => {
 	const defaultCounter = props.gameCounter * 1.5

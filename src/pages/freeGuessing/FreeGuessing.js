@@ -1,12 +1,12 @@
 import React from "react";
-import {Row, Col, Progress, Table, Label, Input, Button} from "reactstrap";
+import {Row, Col, Button} from "reactstrap";
 import { connect } from "react-redux";
 
 
 import Widget from "../../components/Widget";
 
 import Map from "./components/Map/Map";
-import ProgressStats from "./components/ProgressStats";
+import ProgressStats from "../randomMap/components/ProgressStats";
 
 import s from "./FreeGuessing.module.scss";
 
