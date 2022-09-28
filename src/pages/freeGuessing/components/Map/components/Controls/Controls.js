@@ -9,7 +9,7 @@ import {
 import {connect} from "react-redux";
 
 import ProgressStats from "../../../../../randomMap/components/ProgressStats";
-import ResultsModal from "../../../ResultsModal"
+import ResultsModal from "../../../../../randomMap/components/Map/components/ResultsModal"
 import Widget from "../../../../../../components/Widget";
 import { foundCountry, newGame, setGameOver, setState } from "../../../../../../actions/map";
 import s from "../../../Map/Map.module.scss";
@@ -37,13 +37,12 @@ const Controls = props => {
 
   const handleEndGame = () => {
 		setEndGameModalOpen(false)
-		const score = props.totalCountries - props.countries.length
     props.dispatch(setGameOver(
 			props.token,
 			props.user.id,
 			"Free Guessing",
 			props.activeMap,
-			score,
+			props.foundCountries?.length || 0,
 			props.gameCounter - counter
 		))
     setStarted(false)

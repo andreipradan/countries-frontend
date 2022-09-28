@@ -27,6 +27,7 @@ const initialState = {
 	foundCountries: null,
 	gameCounter: 0,
 	gameOver: false,
+	gameType: null,
 	inProgress: false,
 	loading: false,
 	scores: null,

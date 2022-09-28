@@ -271,12 +271,9 @@ const Header = props => {
     <Modal isOpen={logoutModalOpen} toggle={toggleLogoutModal}>
       <ModalHeader toggle={toggleLogoutModal}>Are you sure?</ModalHeader>
       <ModalBody>
-        Do you really want to {
-        props.map.inProgress && "end your game and "
-      }log out?{
+        Do you really want to {props.map.inProgress && "end your game and "}log out?{
         props.map.inProgress && <><br />
         (Your game duration will be set to maximum)</>
-
       }
       </ModalBody>
       <ModalFooter>
@@ -286,8 +283,9 @@ const Header = props => {
             props.dispatch(setGameOver(
               props.token,
               props.user.id,
+              props.map.gameType,
               props.map.activeMap,
-              props.map.totalCountries - props.map.countries.length,
+              props.foundCountries?.length || 0,
               props.map.gameCounter,
             ))
           }

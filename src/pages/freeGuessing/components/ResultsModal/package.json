@@ -1,6 +1,0 @@
-{
-  "name": "results-modal",
-  "version": "1.0.0",
-  "private": true,
-  "main": "./ResultsModal.js"
-}

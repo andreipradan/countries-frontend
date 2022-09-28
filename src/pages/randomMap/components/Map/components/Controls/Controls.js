@@ -45,13 +45,12 @@ const Controls = props => {
 
   const handleEndGame = () => {
 		setEndGameModalOpen(false)
-		const score = props.totalCountries - props.countries.length
     props.dispatch(setGameOver(
 			props.token,
 			props.user.id,
 			"Random Map",
 			props.activeMap,
-			score,
+			props.foundCountries?.length || 0,
 			defaultCounter - counter
 		))
 		props.started && props.dispatch(setState({started: false}))
@@ -161,6 +160,7 @@ const Controls = props => {
 						type="submit"
 						onClick={() => {
 							ref.current.focus()
+							toast.warning(props.currentCountry.name)
 							props.dispatch({type: SET_RANDOM_COUNTRY})
 						}}
 					>
