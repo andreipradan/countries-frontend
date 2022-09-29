@@ -18,7 +18,7 @@ import {
 	setGameOver,
 	setState
 } from "../../../../../../actions/map";
-import s from "../../Map.module.scss";
+import s from "../../../../../freeGuessing/components/Map/Map.module.scss";
 import SearchIcon from "../../../../../../components/Icons/HeaderIcons/SearchIcon";
 import { secondsToTime } from "../../../../../freeGuessing/utils"
 
@@ -27,11 +27,10 @@ const Controls = props => {
   const [counter, setCounter] = useState(defaultCounter)
 	const [modal, setModal] = useState(false)
 	const [endGameModalOpen, setEndGameModalOpen] = useState(false)
-	const ref = useRef(null)
 
   useEffect(() => {
 		setCounter(defaultCounter)
-		handleNewGame("World")
+		handleNewGame()
 	}, [defaultCounter, props.totalCountries])
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const Controls = props => {
     props.dispatch(setGameOver(
 			props.token,
 			props.user.id,
-			"Random Map",
+			props.gameType,
 			props.activeMap,
 			props.foundCountries?.length || 0,
 			defaultCounter - counter
@@ -104,7 +103,6 @@ const Controls = props => {
 						id="search-input"
 						className="input-transparent"
 						placeholder="Country"
-						ref={ref}
 						onKeyUp={event => {
 							if (
 								event.key === "Escape" ||
@@ -159,7 +157,6 @@ const Controls = props => {
 						size="xs"
 						type="submit"
 						onClick={() => {
-							ref.current.focus()
 							toast.warning(props.currentCountry.name)
 							props.dispatch({type: SET_RANDOM_COUNTRY})
 						}}

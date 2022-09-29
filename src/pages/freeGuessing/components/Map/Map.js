@@ -4,14 +4,23 @@ import { connect } from "react-redux";
 
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
-import am5geodata_continentsLow from "@amcharts/amcharts5-geodata/continentsLow";
-import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
+import continentsMap from "@amcharts/amcharts5-geodata/continentsLow";
+import worldMap from "@amcharts/amcharts5-geodata/worldHigh";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import countries from "@amcharts/amcharts5-geodata/data/countries2";
 
 import { newGame } from "../../../../actions/map";
 import s from './Map.module.scss';
 import Controls from "./components/Controls";
+
+const defaultButtonProps = {
+  paddingTop: 10,
+  paddingBottom: 10,
+  x: am5.percent(100),
+  centerX: am5.percent(100),
+  opacity: 0,
+  interactiveChildren: false,
+}
 
 const Map = props => {
   const [allSeries, setAllSeries] = useState(null)
@@ -20,8 +29,8 @@ const Map = props => {
 
   const generateSeries = (chart, root, continent) => {
     const series = chart.series.push(am5map.MapPolygonSeries.new(root, {
-      geoJSON: am5geodata_worldLow,
-      include: am5geodata_worldLow.features.filter(c =>
+      geoJSON: worldMap,
+      include: worldMap.features.filter(c =>
         !!continent
         ? c.id === "KN"
           ? continent === "North America"
@@ -71,7 +80,7 @@ const Map = props => {
     }
     setAllSeries(allSeries)
     const continentSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
-        geoJSON: am5geodata_continentsLow,
+        geoJSON: continentsMap,
         exclude: ['antarctica'],
       }),
     );
@@ -104,12 +113,7 @@ const Map = props => {
     zoomControl.plusButton.set("scale", .75)
 
     const homeButton = chart.children.push(am5.Button.new(root, {
-      paddingTop: 10,
-      paddingBottom: 10,
-      x: am5.percent(100),
-      centerX: am5.percent(100),
-      opacity: 0,
-      interactiveChildren: false,
+      ...defaultButtonProps,
       scale: .75,
       icon: am5.Graphics.new(root, {
         svgPath: "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8",
@@ -131,7 +135,7 @@ const Map = props => {
 
   useEffect(() => {
     if (!props.activeMap || !allSeries) return
-    const data = am5geodata_worldLow.features.map(c => {
+    const data = worldMap.features.map(c => {
       const config = {
         id: c.properties.id,
         name: c.properties.name,

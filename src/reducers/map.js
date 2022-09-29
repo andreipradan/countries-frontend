@@ -82,7 +82,7 @@ export default (state = initialState, action) => {
                 + currentDate.getMinutes() + ":"
                 + currentDate.getSeconds();
 			const countryToRemove = state.countries.find(c => c.name.toLowerCase() === action.payload.toLowerCase())
-			const country = {name: countryToRemove.name, time: datetime}
+			const country = {...countryToRemove, time: datetime}
 			const remainingCountries = state.countries.filter(c =>
 				c.name !== countryToRemove.name
 			)

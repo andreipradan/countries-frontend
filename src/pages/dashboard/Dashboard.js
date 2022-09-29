@@ -1,7 +1,5 @@
 import React from "react";
 import { Row, Col, Progress, Table, Label, Input } from "reactstrap";
-import { connect } from "react-redux";
-
 
 import Widget from "../../components/Widget";
 

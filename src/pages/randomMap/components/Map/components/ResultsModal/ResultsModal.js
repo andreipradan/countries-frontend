@@ -1,22 +1,36 @@
 import {
   Badge,
   Button,
-  ButtonGroup,
+  ButtonGroup, Input, InputGroup, InputGroupAddon, InputGroupText,
   ListGroup,
   ListGroupItem,
   Modal
 } from "reactstrap";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import s from './Results.module.scss';
+import MapClasses from "../../../../../freeGuessing/components/Map/Map.module.scss";
+
 import listGroupClasses from '../../../../../../components/Notifications/notifications-demo/ListGroup.module.scss';
 import notificationsClasses from '../../../../../../components/Notifications/Notifications.module.scss';
 import { connect } from "react-redux";
+import { setState } from "../../../../../../actions/map";
+import SearchIcon
+  from "../../../../../../components/Icons/HeaderIcons/SearchIcon";
 
 const ResultsModal = props => {
   const [activeTab, setActiveTab] = useState("foundCountries")
+  const [countryList, setCountryList] = useState(null)
+  const [searchText, setSearchText] = useState("")
+
   let countries = props[activeTab]
   if (activeTab === "countries")
     countries = countries.sort((a, b) => a.name > b.name ? 1 : -1)
+
+  useEffect(() => {
+    if (!props.isOpen) return searchText && setSearchText("")
+    setCountryList(countries?.filter(c => c.name.toLowerCase().includes(searchText)))
+  }, [countries, props.isOpen, searchText])
+
 
   const color = props.foundCountries?.length < props.totalCountries * 10 / 100
     ? "danger"
@@ -76,12 +90,35 @@ const ResultsModal = props => {
             </Badge>
           </Button>
         </ButtonGroup>
+        <InputGroup className={`input-group-no-border ${MapClasses.searchForm}`}>
+					<InputGroupAddon addonType="prepend">
+						<InputGroupText className={MapClasses.inputGroupText}>
+							<SearchIcon className={MapClasses.headerIcon}/>
+						</InputGroupText>
+					</InputGroupAddon>
+					<Input
+						id="search-input"
+						className="input-transparent"
+						placeholder="Search"
+						onKeyUp={event => {event.key === "Escape" && setSearchText("")}
+					}
+						onInput={e => {
+							e.preventDefault()
+              setSearchText(e.target.value.toLowerCase().trim())
+						}}
+						autoFocus
+					/>
+				</InputGroup>
       </header>
       <ListGroup className={[listGroupClasses.listGroup, 'thin-scroll'].join(' ')}>
         {
-          countries
-            ? countries.map((c, i) =>
-              <ListGroupItem className={listGroupClasses.listGroupItem} key={i}>
+          countryList
+            ? countryList.map((c, i) =>
+              <ListGroupItem
+                className={listGroupClasses.listGroupItem}
+                key={i}
+                onClick={() => props.dispatch(setState({currentCountry: c}))}
+              >
                 <span className={[listGroupClasses.notificationIcon, 'thumb-sm'].join(' ')}>
                   <i
                     className={
