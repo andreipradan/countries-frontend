@@ -27,7 +27,7 @@ const ResultsModal = props => {
     countries = countries.sort((a, b) => a.name > b.name ? 1 : -1)
 
   useEffect(() => {
-    if (!props.isOpen) return searchText && setSearchText("")
+    // if (!props.isOpen) return searchText && setSearchText("")  // TODO: bring this back?
     setCountryList(countries?.filter(c => c.name.toLowerCase().includes(searchText)))
   }, [countries, props.isOpen, searchText])
 
