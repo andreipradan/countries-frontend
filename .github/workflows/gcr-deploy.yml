@@ -9,6 +9,7 @@ env:
   PROJECT_ID: ${{ secrets.GCR_PROJECT }}
   RUN_REGION: europe-west4
   SERVICE_NAME: country-guesser-prod
+  REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
 jobs:
   build:
@@ -93,4 +94,5 @@ jobs:
             --region "$RUN_REGION" \
             --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
             --platform "managed" \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --set-env-vars "REACT_APP_API_URL=$REACT_APP_API_URL"
