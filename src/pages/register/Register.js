@@ -40,7 +40,7 @@ const Register = props => {
 		return <div className="auth-page">
 			<Container>
 				<Widget className="widget-auth mx-auto"
-								title={<h3 className="mt-0">Login to your Web App</h3>}>
+								title={<h3 className="mt-0">Register</h3>}>
 					<p className="widget-auth-info">
 						Please fill all fields below.
 					</p>

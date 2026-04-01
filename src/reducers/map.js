@@ -111,9 +111,10 @@ export default (state = initialState, action) => {
 				countries: countries.map(f =>
 					({id: f.properties.id, name: f.properties.name})),
 				currentCountry: null,
+				skippedCountries: null,
 				foundCountries: null,
 				gameCounter: countries?.map(c => c.properties.name).reduce((partialSum, item) =>
-					partialSum + item.length, 0) / 2.3,
+					partialSum + item.length, 0) / 2.2,
 				gameOver: false,
 				inProgress: false,
 				totalCountries: countries.length,
